@@ -5,8 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StockApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized">
+    <Window.Resources>
+        <!--Live button style-->
+        <Style TargetType="Button" x:Key="LiveButton">
+            <Setter Property="FontSize" Value="16"></Setter>
+            <Setter Property="Background" Value="#FFD1AB1B"></Setter>
+            <Setter Property="Margin" Value="10"></Setter>
+            <Setter Property="MaxHeight" Value="35"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid ShowGridLines="false">
+        <Grid.Background>
+            <SolidColorBrush Color="#FF393B3F"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
         
+        <Button Grid.Row="1" Grid.Column="1"  Content="LIVE" Style="{StaticResource LiveButton}" Background="#FFDD6C6C"></Button>
+        <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Watch stock details in real time ! Only 5 request per day for regular users. Upgrade to VIP for unlimited requests</TextBlock>
+        
+        <Button Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" ></Button>
+        <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Check stock market history from 2001 to 2015. Unlimited requests</TextBlock>
+
+        <Button Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D"></Button>
+        <TextBlock Grid.Column="1" Grid.Row="6" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Import data option allows you to import pre saved requests. Note: JSON file only</TextBlock>
+
+        <TextBlock Grid.Column="4" Grid.ColumnSpan="4" Foreground="White" TextAlignment="Center" VerticalAlignment="Bottom" FontSize="14">Your last data request or current stock market view:</TextBlock>
+        <Frame Background="White" Grid.Column="3" Margin="0 10 0 0" Grid.ColumnSpan="6" Grid.Row="1" Grid.RowSpan="6">
+            
+        </Frame>
     </Grid>
+    
 </Window>
+    
+    
+    
+    
