@@ -31,5 +31,12 @@ namespace StockApp
             await Task.Run(() => Thread.Sleep(3000));
             loader.Visibility = Visibility.Collapsed;
         }
+
+        private void CreateAccBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var registration = new Registration();
+            registration.Show();
+            this.Close();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿<Window x:Class="StockApp.Registration"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StockApp"
@@ -40,30 +41,31 @@
         <StackPanel Grid.Row="1" Grid.RowSpan="7" Grid.Column="1" Grid.ColumnSpan="2" Background="{StaticResource TransparentGray}">
             <!--Username-->
             <Label HorizontalAlignment="Center" Margin="0 15 0 0" Foreground="White" >User Name</Label>
-            <TextBox MaxWidth="200"></TextBox>
+            <TextBox x:Name="username_input" MaxWidth="200"></TextBox>
             
             <!--F name-->
             <Label HorizontalAlignment="Center" Foreground="White" >First Name</Label>
-            <TextBox MaxWidth="200"></TextBox>
+            <TextBox x:Name="firstname_input" MaxWidth="200"></TextBox>
 
             <!--L name-->
             <Label HorizontalAlignment="Center" Foreground="White" >Last Name</Label>
-            <TextBox MaxWidth="200"></TextBox>
+            <TextBox x:Name="lastname_input" MaxWidth="200"></TextBox>
 
             <!--Email-->
             <Label HorizontalAlignment="Center" Foreground="White" >Email</Label>
-            <TextBox MaxWidth="200"></TextBox>
+            <TextBox x:Name="email_input" MaxWidth="200"></TextBox>
 
             <!--Password-->
             <Label HorizontalAlignment="Center" Foreground="White" >Password</Label>
-            <TextBox MaxWidth="200"></TextBox>
+            <TextBox x:Name="password_input" MaxWidth="200"></TextBox>
             
             <!--Button Register-->
-            <Button MaxWidth="200" Margin="0 10 0 0" Background="#5cb85c" Foreground="white">Submit</Button>
+            <Button x:Name="submitRegistration" MaxWidth="200" Margin="0 10 0 0" Background="#5cb85c" Foreground="white" Click="SubmitRegistration_Click">Submit</Button>
+            <Image x:Name="loader" Margin="0 10 0 0" MaxWidth="60" Visibility="Collapsed" gif:ImageBehavior.AnimatedSource="Resources/images/loader3.gif"/>
 
             <!--Error message-->
-            <Border Visibility="Collapsed" Margin="2 10 2 2" HorizontalAlignment="Center" VerticalAlignment="center" BorderThickness="1" BorderBrush="#FFD9534F" >
-                <TextBlock FontSize="13" TextWrapping="Wrap" Margin="2" Foreground="#FFD9534F">Error message testdsgshdhd gfghgfjfj jhjghjtghjtg gfghgfjf</TextBlock>
+            <Border x:Name="errorArea" Visibility="Collapsed" Margin="2 10 2 2" HorizontalAlignment="Center" VerticalAlignment="center" BorderThickness="1" BorderBrush="#FFD9534F" >
+                <TextBlock x:Name="errorMsg" FontSize="13" TextWrapping="Wrap" Margin="2" Foreground="#FFD9534F">Error message testdsgshdhd gfghgfjfj jhjghjtghjtg gfghgfjf</TextBlock>
             </Border>
         </StackPanel>
 
@@ -73,8 +75,11 @@
             <TextBlock Margin="10" HorizontalAlignment="Center" Foreground="white" TextWrapping="Wrap">Please use normal characters A-Z and numbers 0-9 for registration. Any special sign like !@#$%... wont be accepted. </TextBlock>
             <TextBlock Margin="10" HorizontalAlignment="Center" Foreground="white" TextWrapping="Wrap">After you successfully create account, than you will be able to see stock data in real time, historical data and import your own data in our application.</TextBlock>
             <TextBlock Margin="10" HorizontalAlignment="Center" Foreground="white" TextWrapping="Wrap">Do you already have account ?</TextBlock>
-            <Button MaxWidth="200" Background="#428bca" Foreground="white">Go back to log in</Button>
+            <Button x:Name="backToLoginBtn" MaxWidth="200" Background="#428bca" Foreground="white" Click="BackToLoginBtn_Click">Go back to log in</Button>
         </StackPanel>
+        
+        <!--REGISTRATION SUCCESSFULL -->
+        
 
     </Grid>
 
