@@ -1,0 +1,178 @@
+﻿<Window x:Class="StockApp.HistoryNyse"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized">
+    <Window.Resources>
+        <!--Live button style-->
+        <Style TargetType="Button" x:Key="LiveButton">
+            <Setter Property="FontSize" Value="16"></Setter>
+            <Setter Property="Background" Value="#FFD1AB1B"></Setter>
+            <Setter Property="Margin" Value="10"></Setter>
+            <Setter Property="MaxHeight" Value="35"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="Foreground" Value="White"></Setter>
+        </Style>
+        <Style TargetType="Label" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="white"></Setter>
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+        </Style>
+        <Style TargetType="StackPanel" x:Key="StackStyle">
+            <Setter Property="Background" Value="#7F051405"></Setter>
+            <Setter Property="Margin" Value="5 2 5 2"></Setter>
+        </Style>
+        <Style TargetType="TextBox" x:Key="TextBoxStyle">
+            <Setter Property="Margin" Value="5 0"></Setter>
+        </Style>
+        
+    </Window.Resources>
+    <Grid ShowGridLines="false">
+        <Grid.Background>
+            <SolidColorBrush Color="#FF393B3F"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!--HORIZONTAL BAR-->
+        <!--exchange-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="1">
+            <Label Style="{StaticResource LabelStyle}">Exchange</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}" VerticalAlignment="Bottom"></TextBox>
+        </StackPanel>
+
+        <!--stock symbol-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="2">
+            <Label Style="{StaticResource LabelStyle}">Symbol</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+
+        <!--stock Date-->
+        <StackPanel Style="{StaticResource StackStyle}"  Margin="2" Grid.Row="0" Grid.Column="3">
+            <Label Style="{StaticResource LabelStyle}">Date From</Label>
+            <DatePicker></DatePicker>
+        </StackPanel>
+
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="4">
+            <Label Style="{StaticResource LabelStyle}">Date To</Label>
+            <DatePicker></DatePicker>
+        </StackPanel>
+
+        <!--History-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Orientation="Vertical" Grid.RowSpan="1">
+            <TextBlock  VerticalAlignment="Center" Background="#FFD1AB1B" Foreground="White" TextAlignment="Center">History</TextBlock>
+            <TextBlock TextAlignment="Center" TextWrapping="wrap" Foreground="white">Check stock market history from 2001 to 2015. Unlimited requests</TextBlock>
+        </StackPanel>
+        
+        <!--Compare-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="6" Orientation="Vertical" Grid.RowSpan="1">
+            <Button Style="{StaticResource LiveButton}" Background="Coral">Compare</Button>
+            <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap">Compare this search with other data...</TextBlock>
+        </StackPanel>
+
+        <!--Save-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="7" Orientation="Vertical" Grid.RowSpan="1">
+            <Button Style="{StaticResource LiveButton}" Background="Coral">Save</Button>
+            <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap">Save this search data to your PC...</TextBlock>
+        </StackPanel>
+
+        <!--Go Back to Homepage-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="8" Orientation="Vertical" Grid.RowSpan="1">
+            <Button x:Name="homepageBtn" Style="{StaticResource LiveButton}" Background="Coral" Click="HomepageBtn_Click">Homepage</Button>
+            <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap">Go back to homepage...</TextBlock>
+        </StackPanel>
+        
+        <!--Empty stacks, for visual purpouses-->
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="5" Orientation="Vertical" Grid.RowSpan="1">
+        </StackPanel>
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="9" Orientation="Vertical" Grid.RowSpan="1">
+        </StackPanel>
+
+        <!--VERTICAL BAR-->
+        <!--stock price open-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="1" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Price Open From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Price Open To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+
+        <!--stock price high-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="2" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Price High From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Price High To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+
+        <!--stock price low-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="3" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Price Low From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Price Low To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+
+        <!--stock price close-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="4" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Price Close From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Price Close To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+        
+        <!--Volume-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="5" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Volume From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Volume To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+        
+        <!--Prije ADJ-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="6" Grid.RowSpan="1">
+            <Label Style="{StaticResource LabelStyle}">Price Adj. Close From</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+            <Label Style="{StaticResource LabelStyle}">Price Adj. Close To</Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"></TextBox>
+        </StackPanel>
+
+        <!--Search-->
+        <StackPanel Style="{StaticResource StackStyle}" Grid.Row="7" Grid.RowSpan="1">
+            <Button Margin="5" Background="#428bca" Foreground="White">Search</Button>
+        </StackPanel>
+        
+        <!--DATA TABLE-->
+        <DataGrid FontSize="14" FontWeight="SemiBold" x:Name="dataGrid_nyse" Margin="10" Grid.Row="1" Grid.Column="1" Grid.RowSpan="7" Grid.ColumnSpan="6" RowBackground="#7F5CB85C" MinColumnWidth="25"/>
+
+    </Grid>
+
+</Window>
+    
+    
+    
+    

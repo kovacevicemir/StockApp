@@ -24,5 +24,12 @@ namespace StockApp
         {
             InitializeComponent();
         }
+
+        private void HistoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var history = new HistoryNyse();
+            history.Show();
+            this.Close();
+        }
     }
 }

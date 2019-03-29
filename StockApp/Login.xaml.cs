@@ -76,7 +76,10 @@ namespace StockApp
             }
             else
             {
-                MessageBox.Show("Loged successfully");
+                await Task.Run(() => Thread.Sleep(1000));
+                var homepage = new MainWindow();
+                homepage.Show();
+                this.Close();
             }
             //
         }

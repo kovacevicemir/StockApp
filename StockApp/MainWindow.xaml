@@ -48,7 +48,7 @@
         <Button Grid.Row="1" Grid.Column="1"  Content="LIVE" Style="{StaticResource LiveButton}" Background="#FFDD6C6C"></Button>
         <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Watch stock details in real time ! Only 5 request per day for regular users. Upgrade to VIP for unlimited requests</TextBlock>
         
-        <Button Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" ></Button>
+        <Button x:Name="historyBtn" Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" Click="HistoryBtn_Click" ></Button>
         <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Check stock market history from 2001 to 2015. Unlimited requests</TextBlock>
 
         <Button Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D"></Button>
