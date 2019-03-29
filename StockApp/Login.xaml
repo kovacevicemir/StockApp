@@ -38,16 +38,16 @@
         
         <!--Username-->
         <Label Grid.Column="2" Grid.Row="1" Foreground="White" VerticalAlignment="Bottom" HorizontalAlignment="left">Username</Label>
-        <TextBox Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" MaxHeight="25" FontSize="14"></TextBox>
+        <TextBox x:Name="username_input" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" MaxHeight="25" FontSize="14"></TextBox>
 
         <!--Password-->
         <Label Grid.Column="2" Grid.Row="3" Foreground="White" VerticalAlignment="top" HorizontalAlignment="left">Password</Label>
-        <TextBox Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="2" MaxHeight="25" FontSize="14">
-        </TextBox>
+        <PasswordBox x:Name="password_input"  Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="2" MaxHeight="25" FontSize="14" PasswordChar="*" >
+        </PasswordBox>
 
         <!--Error message-->
-        <Border Visibility="Collapsed" Grid.Column="2" Grid.Row="5" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="center" BorderThickness="1" BorderBrush="#FFD9534F" >
-            <TextBlock FontSize="13" TextWrapping="Wrap" Margin="2" Foreground="#FFD9534F">Error message testdsgshdhd</TextBlock>
+        <Border x:Name="errorArea" Visibility="Collapsed" Grid.Column="2" Grid.Row="5" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="center" BorderThickness="1" BorderBrush="#FFD9534F" >
+            <TextBlock x:Name="errorMsg" FontSize="13" TextWrapping="Wrap" Margin="2" Foreground="#FFD9534F">Error message testdsgshdhd</TextBlock>
         </Border>
 
         <!--Buttons-->

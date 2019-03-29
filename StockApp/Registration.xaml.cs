@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -48,7 +49,24 @@ namespace StockApp
             new_member.email = email_input.Text;
             new_member.password = password_input.Text;
 
-            //Verify all inputs:
+            //VERIFY ALL INPUTS:
+            //Username verification
+            var username_verification = Verification(new_member.username);
+                if(username_verification == false) { return; }
+
+                //Firstname verification
+                var firstname_verification = Verification(new_member.firstname);
+                if (firstname_verification == false) { return; }
+
+                //Lastname verification
+                var lastname_verification = Verification(new_member.lastname);
+                if (lastname_verification == false) { return; }
+
+                //Password verification
+                var password_verification = Verification(new_member.password);
+                if (password_verification == false) { return; }
+
+
 
             //Create Query command that select username where username = username_input
             int i = 0;
@@ -89,6 +107,7 @@ namespace StockApp
             
         }
 
+        //BACK TO LOGIN BUTTON HANDLER
         private void BackToLoginBtn_Click(object sender, RoutedEventArgs e)
         {
             var loginpg = new Login();
@@ -96,6 +115,7 @@ namespace StockApp
             this.Close();
         }
 
+        //GIF LOADER AND SUCCESSFULL MESSAGE
         public async void Loader()
         {
             //Show loading gif
@@ -109,6 +129,28 @@ namespace StockApp
             var loginpg = new Login();
             loginpg.Show();
             this.Close();
+        }
+
+        //VERIFICATION METHOD - 0-9 A-Z
+        public bool Verification(string verify)
+        {
+            if (verify != "")
+            {
+                bool verification = Regex.IsMatch(verify, @"^[a-zA-Z0-9]+$");
+                if (verification == false)
+                {
+                    errorArea.Visibility = Visibility.Visible;
+                    errorMsg.Text = "Please use only A-z and 0-9 for username. No spaces allowed !";
+                    return false;
+                }
+            }
+            else
+            {
+                errorArea.Visibility = Visibility.Visible;
+                errorMsg.Text = "Username cannot be empty!";
+                return false;
+            }
+            return true;
         }
     }
 }

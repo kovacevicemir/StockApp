@@ -41,23 +41,23 @@
         <StackPanel Grid.Row="1" Grid.RowSpan="7" Grid.Column="1" Grid.ColumnSpan="2" Background="{StaticResource TransparentGray}">
             <!--Username-->
             <Label HorizontalAlignment="Center" Margin="0 15 0 0" Foreground="White" >User Name</Label>
-            <TextBox x:Name="username_input" MaxWidth="200"></TextBox>
+            <TextBox x:Name="username_input" MaxWidth="200" MaxLength="49"></TextBox>
             
             <!--F name-->
             <Label HorizontalAlignment="Center" Foreground="White" >First Name</Label>
-            <TextBox x:Name="firstname_input" MaxWidth="200"></TextBox>
+            <TextBox x:Name="firstname_input" MaxWidth="200" MaxLength="49"></TextBox>
 
             <!--L name-->
             <Label HorizontalAlignment="Center" Foreground="White" >Last Name</Label>
-            <TextBox x:Name="lastname_input" MaxWidth="200"></TextBox>
+            <TextBox x:Name="lastname_input" MaxWidth="200" MaxLength="49"></TextBox>
 
             <!--Email-->
             <Label HorizontalAlignment="Center" Foreground="White" >Email</Label>
-            <TextBox x:Name="email_input" MaxWidth="200"></TextBox>
+            <TextBox x:Name="email_input" MaxWidth="200" MaxLength="49"></TextBox>
 
             <!--Password-->
             <Label HorizontalAlignment="Center" Foreground="White" >Password</Label>
-            <TextBox x:Name="password_input" MaxWidth="200"></TextBox>
+            <TextBox x:Name="password_input" MaxWidth="200" MaxLength="49"></TextBox>
             
             <!--Button Register-->
             <Button x:Name="submitRegistration" MaxWidth="200" Margin="0 10 0 0" Background="#5cb85c" Foreground="white" Click="SubmitRegistration_Click">Submit</Button>
