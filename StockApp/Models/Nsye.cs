@@ -11,8 +11,8 @@ namespace StockApp.Models
         public string exchange { get; set; }
         public string stock_symbol { get; set; }
 
-        public string date_from { get; set; }
-        public string date_to { get; set; }
+        public string date_from { get; set; } = "1/01/1999";
+        public string date_to { get; set; } = "1/12/2025";
 
         public float stock_price_open_from { get; set; } = 1;
         public float stock_price_open_to { get; set; } = 1000;

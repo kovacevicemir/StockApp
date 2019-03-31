@@ -156,16 +156,24 @@ namespace StockApp
             }
 
             //Date
-            Search.date_from = dateFrom.SelectedDate.Value.ToString("d/MM/yyyy");
-            MessageBox.Show(Search.date_from);
-            Search.date_to = dateTo.SelectedDate.Value.ToString("d/MM/yyyy");
-            MessageBox.Show(Search.date_to);
+            if(dateFrom.SelectedDate != null)
+            {
+                Search.date_from = dateFrom.SelectedDate.Value.ToString("dd/MM/yyyy");
+            }
+
+            if (dateTo.SelectedDate != null)
+            {
+                Search.date_to = dateTo.SelectedDate.Value.ToString("dd/MM/yyyy");
+            }
+            //MessageBox.Show(Search.date_from);
+            //MessageBox.Show(Search.date_to);
 
             //Return Search
-            string q = "select * from nyse_history WHERE date BETWEEN " +"'"+Search.date_from+"'" +" AND " + "'"+Search.date_to+"'";
-            string q1 = "select * from nyse_history where date = '7/03/2005'";
-            //SELECT* FROM nyse_history WHERE date BETWEEN '3/03/2005' and '3/03/2006';
-            DataTable dt2 = FetchProducts(q);
+            string date_query = "SELECT * from nyse_history where convert(datetime, date, 103) between CONVERT(datetime, '"+Search.date_from+"', 103) and CONVERT(datetime,'"+Search.date_to+"')";
+            string open_query = "SELECT * FROM nyse_history WHERE CONVERT(float, stock_price_open)" +" BETWEEN "+Search.stock_price_open_from+ " AND " +Search.stock_price_open_to;
+            string mix = "SELECT * from nyse_history where (convert(datetime, date, 103) between CONVERT(datetime, '" + Search.date_from + "', 103) and CONVERT(datetime,'" + Search.date_to + "')) AND (CONVERT(float, stock_price_open) BETWEEN " + Search.stock_price_open_from + " AND " + Search.stock_price_open_to+ ")";
+                
+            DataTable dt2 = FetchProducts(mix);
 
             //Insert data into datagrid_products
             dataGrid_nyse.ItemsSource = dt2.DefaultView;
