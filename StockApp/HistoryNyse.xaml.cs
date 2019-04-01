@@ -80,14 +80,25 @@ namespace StockApp
             return dt1;
         }
 
+        public DataTable FetchProducts1(SqlCommand cmd5)
+        {
+            DataTable dt2 = new DataTable();
+            SqlDataAdapter da1 = new SqlDataAdapter(cmd5);
+            da1.Fill(dt2);
+            return dt2;
+        }
+
         //SEARCH HANDLER
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
             //Store search inputs into Search (Nsye model)
             Nsye Search = new Nsye();
 
-            //Search.exchange = exchangeInput.SelectedValue.ToString();
-            //Search.stock_symbol = symbolInput.SelectedValue.ToString();
+            //Exchange
+            Search.exchange = exchangeInput.SelectedValue.ToString();
+
+            //Symbol
+            Search.stock_symbol = symbolInput.SelectedValue.ToString();
 
             //Open
             if(openFromInput.Text != "")
@@ -158,27 +169,56 @@ namespace StockApp
             //Date
             if(dateFrom.SelectedDate != null)
             {
-                Search.date_from = dateFrom.SelectedDate.Value.ToString("dd/MM/yyyy");
+                Search.date_from = dateFrom.SelectedDate.Value.ToString("d/MM/yyyy");
             }
 
             if (dateTo.SelectedDate != null)
             {
-                Search.date_to = dateTo.SelectedDate.Value.ToString("dd/MM/yyyy");
+                Search.date_to = dateTo.SelectedDate.Value.ToString("d/MM/yyyy");
             }
-            //MessageBox.Show(Search.date_from);
-            //MessageBox.Show(Search.date_to);
+
+
 
             //Return Search
-            string date_query = "SELECT * from nyse_history where convert(datetime, date, 103) between CONVERT(datetime, '"+Search.date_from+"', 103) and CONVERT(datetime,'"+Search.date_to+"')";
-            string open_query = "SELECT * FROM nyse_history WHERE CONVERT(float, stock_price_open)" +" BETWEEN "+Search.stock_price_open_from+ " AND " +Search.stock_price_open_to;
-            string mix = "SELECT * from nyse_history where (convert(datetime, date, 103) between CONVERT(datetime, '" + Search.date_from + "', 103) and CONVERT(datetime,'" + Search.date_to + "')) AND (CONVERT(float, stock_price_open) BETWEEN " + Search.stock_price_open_from + " AND " + Search.stock_price_open_to+ ")";
-                
-            DataTable dt2 = FetchProducts(mix);
+            //string date_query = "SELECT * from nyse_history where convert(datetime, date, 103) between CONVERT(datetime, '"+Search.date_from+"', 103) and CONVERT(datetime,'"+Search.date_to+"')";
+            //string open_query = "SELECT * FROM nyse_history WHERE CONVERT(float, stock_price_open)" +" BETWEEN "+Search.stock_price_open_from+ " AND " +Search.stock_price_open_to;
+            //string mix = "SELECT * from nyse_history where (convert(datetime, date, 103) between CONVERT(datetime, '" + Search.date_from + "', 103) and CONVERT(datetime,'" + Search.date_to + "')) " +
+            //    "AND (CONVERT(float, stock_price_open) BETWEEN " + Search.stock_price_open_from + " AND " + Search.stock_price_open_to+
+            //    ") AND (CONVERT(float, stock_price_high) BETWEEN " + Search.stock_price_high_from + " AND " + Search.stock_price_high_to +")";
 
-            //Insert data into datagrid_products
-            dataGrid_nyse.ItemsSource = dt2.DefaultView;
-            dataGrid_nyse.CanUserAddRows = false;
 
+
+            //CALL STORED PROCEDURE WHICH RETURN SEARCH FROM DB
+            using (SqlCommand cmd = new SqlCommand("SearchData", con))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.Add("@exchange", SqlDbType.VarChar).Value = Search.exchange;
+                cmd.Parameters.Add("@symbol", SqlDbType.VarChar).Value = Search.stock_symbol;
+                cmd.Parameters.Add("@dateFrom", SqlDbType.VarChar).Value = Search.date_from;
+                cmd.Parameters.Add("@dateTo", SqlDbType.VarChar).Value = Search.date_to;
+                cmd.Parameters.Add("@priceOpenFrom", SqlDbType.VarChar).Value = Search.stock_price_open_from;
+                cmd.Parameters.Add("@priceOpenTo", SqlDbType.VarChar).Value = Search.stock_price_open_to;
+                cmd.Parameters.Add("@priceHighFrom", SqlDbType.VarChar).Value = Search.stock_price_high_from;
+                cmd.Parameters.Add("@priceHighTo", SqlDbType.VarChar).Value = Search.stock_price_high_to;
+                cmd.Parameters.Add("@priceCloseFrom", SqlDbType.VarChar).Value = Search.stock_price_close_from;
+                cmd.Parameters.Add("@priceCloseTo", SqlDbType.VarChar).Value = Search.stock_price_close_to;
+                cmd.Parameters.Add("@priceLowFrom", SqlDbType.VarChar).Value = Search.stock_price_low_from;
+                cmd.Parameters.Add("@priceLowTo", SqlDbType.VarChar).Value = Search.stock_price_low_to;
+                cmd.Parameters.Add("@adjFrom", SqlDbType.VarChar).Value = Search.stock_price_adj_close_from;
+                cmd.Parameters.Add("@adjTo", SqlDbType.VarChar).Value = Search.stock_price_adj_close_to;
+                cmd.Parameters.Add("@volumeFrom", SqlDbType.VarChar).Value = Search.stock_volume_from;
+                cmd.Parameters.Add("@volumeTo", SqlDbType.VarChar).Value = Search.stock_volume_to;
+
+
+                cmd.ExecuteNonQuery();
+
+                DataTable dt2 = FetchProducts1(cmd);
+
+                //Insert data into datagrid_products
+                dataGrid_nyse.ItemsSource = dt2.DefaultView;
+                dataGrid_nyse.CanUserAddRows = false;
+            }
         }
 
         //COMBOBOX
