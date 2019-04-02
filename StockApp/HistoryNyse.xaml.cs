@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 using StockApp.Models;
 
 namespace StockApp
@@ -67,6 +70,7 @@ namespace StockApp
         }
 
         //FETCH All FROM DB / PUT IT IN DataTable x
+        //used only for testing, before stored procedures were implemented
         public DataTable FetchProducts(string query)
         {
             SqlCommand cmd2 = con.CreateCommand();
@@ -80,6 +84,7 @@ namespace StockApp
             return dt1;
         }
 
+        //Stored procedure fetch method
         public DataTable FetchProducts1(SqlCommand cmd5)
         {
             DataTable dt2 = new DataTable();
@@ -218,6 +223,14 @@ namespace StockApp
                 //Insert data into datagrid_products
                 dataGrid_nyse.ItemsSource = dt2.DefaultView;
                 dataGrid_nyse.CanUserAddRows = false;
+
+                //Serialise Search and store in database
+                string lastSearchHistory = Nsye.SerializeToXml(Search);
+
+                SqlCommand cmd3 = con.CreateCommand();
+                cmd3.CommandType = CommandType.Text;
+                cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchHistory = '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
+                cmd3.ExecuteNonQuery();
             }
         }
 

@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Global.cs" />
     <Compile Include="HistoryNyse.xaml.cs">
       <DependentUpon>HistoryNyse.xaml</DependentUpon>
     </Compile>

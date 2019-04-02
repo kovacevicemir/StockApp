@@ -76,6 +76,17 @@ namespace StockApp
             }
             else
             {
+                //Save user id in Global storage (session like)
+                foreach(DataRow row in dt.Rows)
+                {
+
+                    Global.thisUser.Id = Convert.ToInt32(row["Id"]);
+                    //Instead of using global, we will serialise search objects and store them in db..
+                    //Global.thisUser.lastSearchAll = row["lastSearchAll"].ToString();
+                    //Global.thisUser.lastSearchHistory = row["lastSearchHistory"].ToString();
+                    //Global.thisUser.lastSearchLive = row["lastSearchLive"].ToString();
+                }
+
                 await Task.Run(() => Thread.Sleep(1000));
                 var homepage = new MainWindow();
                 homepage.Show();

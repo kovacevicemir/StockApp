@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace StockApp.Models
 {
@@ -31,6 +34,14 @@ namespace StockApp.Models
 
         public float stock_price_adj_close_from { get; set; } = 1;
         public float stock_price_adj_close_to { get; set; } = 1000;
+
+        public static string SerializeToXml(object value)
+        {
+            StringWriter writer = new StringWriter(CultureInfo.InvariantCulture);
+            XmlSerializer serializer = new XmlSerializer(value.GetType());
+            serializer.Serialize(writer, value);
+            return writer.ToString();
+        }
 
     }
 }
