@@ -26,6 +26,11 @@ namespace StockApp
     public partial class HistoryNyse : Window
     {
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        string lastSearchHistory = "";
+
+        //Create dataTabes here, so they can be used in SAVE button handler
+        DataTable dt1 = new DataTable();
+        DataTable dt2 = new DataTable();
 
         public HistoryNyse()
         {
@@ -54,7 +59,7 @@ namespace StockApp
             //Select all from nyse_history table
             //Create new datatable and flll it with cmd2
             string q = "select * from nyse_history";
-            DataTable dt1 = FetchProducts(q);
+            dt1 = FetchProducts(q);
 
             //Insert data into datagrid_products
             dataGrid_nyse.ItemsSource = dt1.DefaultView;
@@ -218,14 +223,14 @@ namespace StockApp
 
                 cmd.ExecuteNonQuery();
 
-                DataTable dt2 = FetchProducts1(cmd);
+                dt2 = FetchProducts1(cmd);
 
                 //Insert data into datagrid_products
                 dataGrid_nyse.ItemsSource = dt2.DefaultView;
                 dataGrid_nyse.CanUserAddRows = false;
 
                 //Serialise Search and store in database
-                string lastSearchHistory = Nsye.SerializeToXml(Search);
+                lastSearchHistory = Global.SerializeToXml(Search);
 
                 SqlCommand cmd3 = con.CreateCommand();
                 cmd3.CommandType = CommandType.Text;
@@ -254,6 +259,21 @@ namespace StockApp
             foreach (DataRow row in dt.Rows)
             {
                 comboBox.Items.Add(row[header].ToString());
+            }
+        }
+
+        //SAVE BUTTON HANDLER
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Save user search from last log in
+            if(dt2.Rows.Count == 0)
+            {
+                Global.SaveDataTableToXml(dt1);
+            }
+            else
+            {
+                //Else Save user search current
+                Global.SaveDataTableToXml(dt2);
             }
         }
     }

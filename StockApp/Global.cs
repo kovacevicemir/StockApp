@@ -1,10 +1,14 @@
-﻿using StockApp.Models;
+﻿using Microsoft.Win32;
+using StockApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -14,35 +18,59 @@ namespace StockApp
     {
         public static Member thisUser = new Member();
 
-        public static Object ObjectToXML(string xml, Type objectType)
+        //SERIALIZE OBJECT TO XML STRING METHOD
+        public static string SerializeToXml(object value)
         {
-            StringReader strReader = null;
-            XmlSerializer serializer = null;
-            XmlTextReader xmlReader = null;
-            Object obj = null;
-            try
-            {
-                strReader = new StringReader(xml);
-                serializer = new XmlSerializer(objectType);
-                xmlReader = new XmlTextReader(strReader);
-                obj = serializer.Deserialize(xmlReader);
-            }
-            catch (Exception exp)
-            {
-                //Handle Exception Code
-            }
-            finally
-            {
-                if (xmlReader != null)
-                {
-                    xmlReader.Close();
-                }
-                if (strReader != null)
-                {
-                    strReader.Close();
-                }
-            }
-            return obj;
+            StringWriter writer = new StringWriter(CultureInfo.InvariantCulture);
+            XmlSerializer serializer = new XmlSerializer(value.GetType());
+            serializer.Serialize(writer, value);
+            return writer.ToString();
         }
+
+        //WRITE TO .XML FILE
+        public static void SaveToXML(string xmlString)
+        {
+            //Create new save dialog
+            var sfd = new SaveFileDialog
+            {
+                Filter = "XML-File | *.xml",
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                //filename is path+filename
+                string filename = sfd.FileName;
+
+               File.WriteAllText(@filename, xmlString);
+                MessageBox.Show("XML created successfully !");
+
+            }
+        }
+
+        //SAVE DATATABLE TO XML
+        public static void SaveDataTableToXml (DataTable datatable)
+        {
+            //Feed dataset
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(datatable);
+
+            //Create new save dialog
+            var sfd = new SaveFileDialog
+            {
+                Filter = "XML-File | *.xml",
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                //filename is path+filename
+                string filename = sfd.FileName;
+
+
+                // Save to disk
+                dataSet.WriteXml(filename);
+            }
+        }
+
+
     }
 }

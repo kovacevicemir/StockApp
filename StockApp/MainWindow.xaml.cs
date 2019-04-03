@@ -50,29 +50,29 @@ namespace StockApp
 
         public void Display()
         {
-            //Select from nyse_history table
-            //Create new datatable and flll it with cmd2
+            string xmlObject = "";
+            Nsye lastSearch = new Nsye();
 
+            //Get current user Id
             int Id = Global.thisUser.Id;
             string q = "select lastSearchAll from Users where Id = " + Id;
 
-            Nsye lastSearch = new Nsye();
+            //get user data
             DataTable dt1 = FetchProducts(q);
-
-            string xmlObject = "";
 
             foreach (DataRow row in dt1.Rows)
             {
                 xmlObject = row["lastSearchAll"].ToString();
             }
 
+            //Deserialize lastSearchAll (from current user) to Nyse object (lastSearch)
             XmlSerializer serializer = new XmlSerializer(typeof(Nsye));
             using (TextReader reader = new StringReader(xmlObject))
             {
                 lastSearch = (Nsye)serializer.Deserialize(reader);
             }
 
-            //CALL STORED PROCEDURE WHICH RETURN SEARCH FROM DB
+            //CALL STORED PROCEDURE WHICH RETURN LAST SEARCH FROM CURRENT USER
             using (SqlCommand cmd = new SqlCommand("SearchData", con))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -97,6 +97,7 @@ namespace StockApp
 
                 cmd.ExecuteNonQuery();
 
+                //Get last search data
                 DataTable dt2 = FetchProducts1(cmd);
 
                 //Insert data into datagrid_products
