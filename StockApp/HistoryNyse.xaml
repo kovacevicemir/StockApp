@@ -163,10 +163,10 @@
         </StackPanel>
 
         <!--CHARTS-->
-
+        <TextBlock Grid.Row="1" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" TextWrapping="Wrap" FontStyle="Italic">Data Chart (1000 items max)</TextBlock>
         <!--DATA TABLE-->
         <DataGrid FontSize="14" FontWeight="SemiBold" x:Name="dataGrid_nyse" Margin="10" Grid.Row="1" Grid.Column="1" Grid.RowSpan="7" Grid.ColumnSpan="6" RowBackground="#335CB85C" MinColumnWidth="25"/>
-        <Wpf:CartesianChart x:Name="chart1" Grid.Row="1" Grid.RowSpan="3"  Grid.Column="7" Grid.ColumnSpan="3">
+        <Wpf:CartesianChart x:Name="chart1" Grid.Row="2" Grid.RowSpan="3"  Grid.Column="7" Grid.ColumnSpan="3">
             <Wpf:CartesianChart.AxisY>
                 <Wpf:Axis/>
             </Wpf:CartesianChart.AxisY>
@@ -175,14 +175,14 @@
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
 
-        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="4" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="2" MaxWidth="150" MaxHeight="100">
+        <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="5" Grid.Column="7" Grid.ColumnSpan="3" Grid.RowSpan="2" MaxWidth="150" MaxHeight="100">
             <Label Style="{StaticResource LabelStyle}" Content="Visualise by:" HorizontalAlignment="Center"/>
             <ComboBox x:Name="visualiseInputBy"  Width="100"/>
             <Button x:Name="chart1btn" Click="Chart1btn_Click" Style="{StaticResource LiveButton}" Grid.Row="4" Grid.Column="9" Background="#FF5CB85C" Foreground="White" MaxHeight="25" MaxWidth="100" FontSize="14">Visualise</Button>
         </StackPanel>
         
         <!--No Results-->
-        <TextBox x:Name="noResults" Grid.Row="6" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Background="Bisque">Number of results: </TextBox>
+        <TextBox x:Name="noResults" Grid.Row="7" Grid.Column="8" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Red" Background="Bisque">Number of results: </TextBox>
     </Grid>
 
 </Window>

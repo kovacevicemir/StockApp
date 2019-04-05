@@ -69,7 +69,7 @@ namespace StockApp
         {
             //Select all from nyse_history table
             //Create new datatable and flll it with cmd2
-            string q = "select * from nyse_history";
+            string q = "SELECT * FROM nyse_history ORDER BY CONVERT(datetime, date, 103) ASC";
             dt1 = FetchProducts(q);
 
             //Insert data into datagrid_products
@@ -363,10 +363,15 @@ namespace StockApp
             {
                 if(dt1.Rows.Count > 0)
                 {
+                    var i = 0;
                     foreach (DataRow row in dt1.Rows)
                     {
                         double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
                         numberList.Add(item);
+                        i++;
+
+                        //draw first 1000 table => datachart
+                        if (i >= 1000) break;
                     }
                     //Get First Date and Last date from search... (current datatable)
                     DataRow lastRowDT1 = dt1.Rows[dt1.Rows.Count - 1];
@@ -382,10 +387,15 @@ namespace StockApp
             }
             else //If last search (dt2 exists)
             {
+                var i = 0;
                 foreach (DataRow row in dt2.Rows)
                 {
                     double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
                     numberList.Add(item);
+                    i++;
+
+                    //draw first 1000 table => datachart
+                    if (i >= 1000) break;
                 }
                 //Get First Date and Last date from search... (current datatable)
                 DataRow lastRowDT2 = dt2.Rows[dt2.Rows.Count - 1];
