@@ -16,6 +16,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf;
 using StockApp.Models;
 
 namespace StockApp
@@ -31,6 +35,13 @@ namespace StockApp
         //Create dataTabes here, so they can be used in SAVE button handler
         DataTable dt1 = new DataTable();
         DataTable dt2 = new DataTable();
+
+        //Used for clearing chart labels, prevent doubling up, if its 1 -> clear, 0 -> add new
+        //Using this because AxisX.Clear(); is not working properly...
+        int isLabel = 0;
+
+        //DataTable column Names (used for visualise by: combobox)
+        List<string> colNames = new List<string>();
 
         public HistoryNyse()
         {
@@ -72,6 +83,29 @@ namespace StockApp
             //Fill combo box symbol
             string symbol = "stock_symbol";
             fill_combo_box(symbolInput, symbol);
+
+            //Add Items to colName if dt1 (last search exists)
+            if(dt1.Rows.Count > 0)
+            {
+                colNames.Clear();
+                visualiseInputBy.Items.Clear();
+
+                foreach (DataColumn column in dt1.Columns)
+                {
+                    colNames.Add(column.ColumnName.ToString());
+                }
+
+                foreach (string item in colNames)
+                {
+                    visualiseInputBy.Items.Add(item);
+                }
+
+                visualiseInputBy.Items.Remove("date");
+                visualiseInputBy.Items.Remove("stock_symbol");
+                visualiseInputBy.Items.Remove("exchange");
+
+                noResults.Text = "Number of results: " + dt1.Rows.Count.ToString();
+            }
         }
 
         //FETCH All FROM DB / PUT IT IN DataTable x
@@ -236,6 +270,35 @@ namespace StockApp
                 cmd3.CommandType = CommandType.Text;
                 cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchHistory = '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
                 cmd3.ExecuteNonQuery();
+
+                //update number of results
+                noResults.Text = "Number of results: " + dt2.Rows.Count.ToString();
+
+
+                //Fill Visualise by: combo box:
+                foreach (DataColumn column in dt2.Columns)
+                {
+                    colNames.Add(column.ColumnName.ToString());
+                }
+
+                //add items from colList
+                colNames.Clear();
+                visualiseInputBy.Items.Clear();
+
+                foreach (DataColumn column in dt2.Columns)
+                {
+                    colNames.Add(column.ColumnName.ToString());
+                }
+
+                foreach (string item in colNames)
+                {
+                    visualiseInputBy.Items.Add(item);
+                }
+
+                visualiseInputBy.Items.Remove("date");
+                visualiseInputBy.Items.Remove("stock_symbol");
+                visualiseInputBy.Items.Remove("exchange");
+
             }
         }
 
@@ -275,6 +338,99 @@ namespace StockApp
                 //Else Save user search current
                 Global.SaveDataTableToXml(dt2);
             }
+        }
+
+        private void Chart1btn_Click(object sender, RoutedEventArgs e)
+        {
+            //Check if Visualise by: is selected
+            if(visualiseInputBy.SelectedItem == null)
+            {
+                MessageBox.Show("Please select Visualise By: ");
+                return;
+            }
+
+            string chartDateOne = "";
+            string chartDateTwo = "";
+
+            //List of chart values
+            List<double> numberList = new List<double>();
+
+            //Get visualise by: combobox input
+            string visualiseByInput = visualiseInputBy.SelectedValue.ToString();
+
+            //Add values to list ( DataChart will be drawed from this list)
+            if(dt2.Rows.Count < 1)
+            {
+                if(dt1.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt1.Rows)
+                    {
+                        double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
+                        numberList.Add(item);
+                    }
+                    //Get First Date and Last date from search... (current datatable)
+                    DataRow lastRowDT1 = dt1.Rows[dt1.Rows.Count - 1];
+                    DataRow firstRowDT1 = dt1.Rows[0];
+
+                    chartDateOne = firstRowDT1["date"].ToString();
+                    chartDateTwo = lastRowDT1["date"].ToString();
+                }
+                else
+                {
+                    MessageBox.Show("There is no data to be visualised, please make new search.");
+                }
+            }
+            else //If last search (dt2 exists)
+            {
+                foreach (DataRow row in dt2.Rows)
+                {
+                    double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
+                    numberList.Add(item);
+                }
+                //Get First Date and Last date from search... (current datatable)
+                DataRow lastRowDT2 = dt2.Rows[dt2.Rows.Count - 1];
+                DataRow firstRowDT2 = dt2.Rows[0];
+
+                chartDateOne = firstRowDT2["date"].ToString();
+                chartDateTwo = lastRowDT2["date"].ToString();
+            }
+            
+            //Clear labels if exist (Refresh axisX)
+            if(isLabel == 1)
+            {
+                chart1.AxisX.RemoveAt(1);
+            }
+
+            chart1.Series = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Values = numberList.AsChartValues(),
+                    PointGeometrySize = 2
+                }
+            };
+
+            //Add first and last date from search query to chart
+            chart1.AxisX.Add(new LiveCharts.Wpf.Axis
+            {
+                Separator = new LiveCharts.Wpf.Separator { Step = 1 },
+                Title = "Timeline",
+                MinValue = 0,
+                Labels = new[]
+                {
+                    chartDateOne,
+                    chartDateTwo
+                }
+            });
+            
+            //1 means that AxiX labels has been added, and they will be removed on next execution
+            isLabel = 1;
+
+           
+        }
+
+        private void CompareBtn_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
