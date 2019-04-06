@@ -43,6 +43,9 @@ namespace StockApp
         //DataTable column Names (used for visualise by: combobox)
         List<string> colNames = new List<string>();
 
+        //Search values
+        Nsye Search = new Nsye();
+
         public HistoryNyse()
         {
             InitializeComponent();
@@ -136,7 +139,7 @@ namespace StockApp
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
             //Store search inputs into Search (Nsye model)
-            Nsye Search = new Nsye();
+            Search = new Nsye();
 
             //Exchange
             Search.exchange = exchangeInput.SelectedValue.ToString();
@@ -441,6 +444,61 @@ namespace StockApp
 
         private void CompareBtn_Click(object sender, RoutedEventArgs e)
         {
+            string Compare = "";
+            SqlCommand cmd3 = con.CreateCommand();
+            cmd3.CommandType = CommandType.Text;
+
+            //Compare last search since user loged in
+            if (dt2.Rows.Count > 0)
+            {
+                //Serialise search and save to DB
+                Compare = Global.SerializeTableToString(dt2);
+
+                MessageBox.Show("Dt2 rows > 0, Search to XML...");
+            }
+            else //Compare last search when user last loged in
+            {
+                Compare = Global.SerializeTableToString(dt1);
+
+                MessageBox.Show("dt1 Serialized successfully");
+            }
+
+            //Check -> save string Compare to CompareOne or CompareTwo in db...
+            if (Global.compare1)
+            {
+                Global.compare2 = true;
+                Global.compare1 = false;
+                cmd3.CommandText = "UPDATE Compare SET CompareTwo = '" + Compare + "' WHERE (UserId = '" + Global.thisUser.Id + "') AND (CompareTwo = 'None')";
+                cmd3.ExecuteNonQuery();
+                MessageBox.Show("Updated!");
+            }
+            else
+            {
+                Global.compare1 = true;
+                Global.compare2 = false;
+
+                string x = "None";
+
+                cmd3.CommandText = "INSERT INTO Compare VALUES ('" + Global.thisUser.Id + "', '" + Compare + "', '" +x+ "')";
+                cmd3.ExecuteNonQuery();
+                MessageBox.Show("Inserted!");
+
+            }
+
+            if (Global.compare1)
+            {
+                MessageBox.Show("Compare 1 is true");
+            }
+
+            if (Global.compare2)
+            {
+                MessageBox.Show("Compare 2 is true");
+            }
+
+            //Open Compare Window
+            var CompareWin = new Compare();
+            CompareWin.Show();
+            this.Close();
         }
     }
 }

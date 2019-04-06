@@ -41,14 +41,14 @@ namespace StockApp
                 //filename is path+filename
                 string filename = sfd.FileName;
 
-               File.WriteAllText(@filename, xmlString);
+                File.WriteAllText(@filename, xmlString);
                 MessageBox.Show("XML created successfully !");
 
             }
         }
 
         //SAVE DATATABLE TO XML
-        public static void SaveDataTableToXml (DataTable datatable)
+        public static void SaveDataTableToXml(DataTable datatable)
         {
             //Feed dataset
             DataSet dataSet = new DataSet();
@@ -71,6 +71,46 @@ namespace StockApp
             }
         }
 
+        //SERIALIZE DATA TABLE TO XML STRING
+        public static string SerializeTableToString(DataTable table)
+        {
+            if (table == null)
+            {
+                return null;
+            }
+            else
+            {
+                using (var sw = new StringWriter())
+                using (var tw = new XmlTextWriter(sw))
+                {
+                    // Must set name for serialization to succeed.
+                    table.TableName = @"MyTable";
+
+                    // --
+
+                    tw.Formatting = Formatting.Indented;
+
+                    tw.WriteStartDocument();
+                    tw.WriteStartElement(@"data");
+
+                    ((IXmlSerializable)table).WriteXml(tw);
+
+                    tw.WriteEndElement();
+                    tw.WriteEndDocument();
+
+                    // --
+
+                    tw.Flush();
+                    tw.Close();
+                    sw.Flush();
+
+                    return sw.ToString();
+                }
+            }
+        }
+
+        public static bool compare1 = false;
+        public static bool compare2 = false;
 
     }
 }
