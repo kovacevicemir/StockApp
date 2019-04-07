@@ -31,13 +31,17 @@ namespace StockApp
         {
             InitializeComponent();
 
+            this.Title = Global.AppName + " - Home";
+            Uri iconUri = new Uri("pack://application:,,,/dollar.png", UriKind.RelativeOrAbsolute);
+            this.Icon = BitmapFrame.Create(iconUri);
+
+
             //check for connection state
             if (con.State == System.Data.ConnectionState.Open)
             {
                 con.Close();
             }
             con.Open();
-
             Display();
         }
 

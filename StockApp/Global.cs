@@ -47,7 +47,7 @@ namespace StockApp
             }
         }
 
-        //SAVE DATATABLE TO XML
+        //SAVE DATATABLE TO XML. File
         public static void SaveDataTableToXml(DataTable datatable)
         {
             //Feed dataset
@@ -111,6 +111,12 @@ namespace StockApp
 
         public static bool compare1 = false;
         public static bool compare2 = false;
+
+        //Application name
+        public static string AppName = "Stock Application";
+
+        //CompareTwo Table
+        public static bool CompareTwoTable = false;
 
     }
 }

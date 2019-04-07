@@ -30,12 +30,18 @@ namespace StockApp
         {
             InitializeComponent();
 
+            //Change window title and icon
+            this.Title = Global.AppName + " - Login";
+            Uri iconUri = new Uri("pack://application:,,,/dollar.png", UriKind.RelativeOrAbsolute);
+            this.Icon = BitmapFrame.Create(iconUri);
+
             //check for connection state
             if (con.State == System.Data.ConnectionState.Open)
             {
                 con.Close();
             }
             con.Open();
+
         }
 
         private async void Login_btn_Click(object sender, RoutedEventArgs e)

@@ -86,7 +86,7 @@
         <TextBox x:Name="noResults1" Grid.Row="9" Grid.Column="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Red" Background="Bisque">Number of results:</TextBox>
 
         <!--RIGHT-->
-        <TextBlock Grid.Column="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Cyan" Margin="2 2 2 2">Data One</TextBlock>
+        <TextBlock Grid.Column="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Cyan" Margin="40.4,0,40.6,1.6" Height="38" VerticalAlignment="Bottom">Data Two</TextBlock>
         <DataGrid x:Name="dataTable2" Background="White" Grid.Column="6" Margin="15 25 15 0" Grid.ColumnSpan="6" Grid.Row="0" Grid.RowSpan="6">
         </DataGrid>
 

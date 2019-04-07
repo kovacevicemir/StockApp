@@ -50,6 +50,8 @@ namespace StockApp
         {
             InitializeComponent();
 
+            this.Title = Global.AppName + " - History";
+
             //check for connection state
             if (con.State == System.Data.ConnectionState.Open)
             {
@@ -498,7 +500,15 @@ namespace StockApp
             //Open Compare Window
             var CompareWin = new Compare();
             CompareWin.Show();
-            this.Close();
+
+            //Close Compare window if CompareTwo from Compare.dbo does not exists (Prevent user opening multiple win. with one table only)
+            if (!Global.CompareTwoTable)
+            {
+                Application.Current.Windows[Application.Current.Windows.Count - 1].Close();
+            }
+
+            Global.CompareTwoTable = false;
+
         }
     }
 }

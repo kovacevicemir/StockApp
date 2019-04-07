@@ -166,6 +166,7 @@
     <Resource Include="Resources\images\loader3.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="dollar.png" />
     <Content Include="StockApp.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
