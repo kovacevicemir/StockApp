@@ -495,19 +495,10 @@ namespace StockApp
             if (Global.compare2)
             {
                 MessageBox.Show("Compare 2 is true");
+                //Open Compare Window
+                var CompareWin = new Compare();
+                CompareWin.Show();
             }
-
-            //Open Compare Window
-            var CompareWin = new Compare();
-            CompareWin.Show();
-
-            //Close Compare window if CompareTwo from Compare.dbo does not exists (Prevent user opening multiple win. with one table only)
-            if (!Global.CompareTwoTable)
-            {
-                Application.Current.Windows[Application.Current.Windows.Count - 1].Close();
-            }
-
-            Global.CompareTwoTable = false;
 
         }
     }

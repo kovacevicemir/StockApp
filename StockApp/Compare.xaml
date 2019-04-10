@@ -8,7 +8,7 @@
         xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" x:Class="StockApp.Compare"
         mc:Ignorable="d"
         Title="Compare" Height="450" Width="800"
-        WindowState="Maximized">
+        MinHeight="400" MinWidth="750">
     <Window.Resources>
         <!--Live button style-->
         <Style TargetType="{x:Type Button}" x:Key="LiveButton">
@@ -79,7 +79,7 @@
         <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="4" Grid.RowSpan="2" MaxWidth="150" MaxHeight="100">
             <Label Style="{StaticResource LabelStyle}" Content="Visualise by:" HorizontalAlignment="Center"/>
             <ComboBox x:Name="visualiseInputBy1"  Width="100"/>
-            <Button x:Name="chart1btn" Style="{StaticResource LiveButton}" Grid.Row="4" Grid.Column="9" Background="#FF5CB85C" Foreground="White" MaxHeight="25" MaxWidth="100" FontSize="14">Visualise</Button>
+            <Button x:Name="chart1btn" Style="{StaticResource LiveButton}" Grid.Row="4" Grid.Column="9" Background="#FF5CB85C" Foreground="White" MaxHeight="25" MaxWidth="100" FontSize="14" Click="Chart1btn_Click">Visualise</Button>
         </StackPanel>
 
         <!--No Results-->
@@ -104,7 +104,7 @@
         <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="7" Grid.Column="10" Grid.ColumnSpan="4" Grid.RowSpan="2" MaxWidth="150" MaxHeight="100">
             <Label Style="{StaticResource LabelStyle}" Content="Visualise by:" HorizontalAlignment="Center"/>
             <ComboBox x:Name="visualiseInputBy2"  Width="100"/>
-            <Button x:Name="chart2btn" Style="{StaticResource LiveButton}" Grid.Row="4" Grid.Column="9" Background="#FF5CB85C" Foreground="White" MaxHeight="25" MaxWidth="100" FontSize="14">Visualise</Button>
+            <Button x:Name="chart2btn" Style="{StaticResource LiveButton}" Grid.Row="4" Grid.Column="9" Background="#FF5CB85C" Foreground="White" MaxHeight="25" MaxWidth="100" FontSize="14" Click="Chart2btn_Click">Visualise</Button>
         </StackPanel>
 
         <!--No Results-->
