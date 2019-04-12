@@ -51,7 +51,7 @@
         <Button x:Name="historyBtn" Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" Click="HistoryBtn_Click" ></Button>
         <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Check stock market history from 2001 to 2015. Unlimited requests</TextBlock>
 
-        <Button Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D"></Button>
+        <Button x:Name="importBtn" Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D" Click="ImportBtn_Click"/>
         <TextBlock Grid.Column="1" Grid.Row="6" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Import data option allows you to import pre saved requests. Note: JSON file only</TextBlock>
 
         <TextBlock Grid.Column="4" Grid.ColumnSpan="4" Foreground="White" TextAlignment="Center" VerticalAlignment="Bottom" FontSize="14">Your last data request or current stock market view:</TextBlock>

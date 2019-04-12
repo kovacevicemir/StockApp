@@ -50,9 +50,8 @@ namespace StockApp
         //SAVE DATATABLE TO XML. File
         public static void SaveDataTableToXml(DataTable datatable)
         {
-            //Feed dataset
-            DataSet dataSet = new DataSet();
-            dataSet.Tables.Add(datatable);
+            //Call Serialize table to string method first
+            string xml_table = SerializeTableToString(datatable);
 
             //Create new save dialog
             var sfd = new SaveFileDialog
@@ -67,7 +66,7 @@ namespace StockApp
 
 
                 // Save to disk
-                dataSet.WriteXml(filename);
+                File.WriteAllText(filename, xml_table);
             }
         }
 

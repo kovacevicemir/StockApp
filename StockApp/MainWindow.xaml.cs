@@ -26,6 +26,7 @@ namespace StockApp
     public partial class MainWindow : Window
     {
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        bool isWindowOpen = false;
 
         public MainWindow()
         {
@@ -130,6 +131,26 @@ namespace StockApp
             SqlDataAdapter da1 = new SqlDataAdapter(cmd5);
             da1.Fill(dt2);
             return dt2;
+        }
+
+        private void ImportBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Prevent multiple import windows to be opened
+            foreach (Window w in Application.Current.Windows)
+            {
+                if (w is Import)
+                {
+                    isWindowOpen = true;
+                    w.Activate();
+                }
+            }
+
+            //If import window is not open
+            if (!isWindowOpen)
+            {
+                Import newwindow = new Import();
+                newwindow.Show();
+            }
         }
     }
 }

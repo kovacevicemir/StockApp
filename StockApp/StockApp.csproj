@@ -86,6 +86,9 @@
     <Compile Include="HistoryNyse.xaml.cs">
       <DependentUpon>HistoryNyse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Import.xaml.cs">
+      <DependentUpon>Import.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Member.cs" />
     <Compile Include="Models\Nsye.cs" />
     <Compile Include="Registration.xaml.cs">
@@ -96,6 +99,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="HistoryNyse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Import.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="dollar.png" />
+    <Resource Include="Resources\images\dragdrop.png" />
     <Content Include="StockApp.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
