@@ -7,18 +7,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
+using StockApp.ServiceReference1;
+using Nsye = StockApp.ServiceReference1.Nsye;
 
 namespace StockApp
 {
@@ -27,8 +20,9 @@ namespace StockApp
     /// </summary>
     public partial class Compare : Window
     {
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
 
+        Service1Client service = new Service1Client();
         DataTable tableTwo = new DataTable();
         DataTable tableOne = new DataTable();
         int isLabel1 = 0;
@@ -47,11 +41,11 @@ namespace StockApp
             this.Icon = BitmapFrame.Create(iconUri);
 
             //check for connection state
-            if (con.State == System.Data.ConnectionState.Open)
-            {
-                con.Close();
-            }
-            con.Open();
+            //if (con.State == System.Data.ConnectionState.Open)
+            //{
+            //    con.Close();
+            //}
+            //con.Open();
 
             Display();
 
@@ -60,7 +54,7 @@ namespace StockApp
         {
             //GET TABLE 1
             string searchQ1 = "SELECT TOP 1 * FROM Compare WHERE UserId = " + Global.thisUser.Id + " ORDER BY id DESC";
-            DataTable dt1 = FetchProducts(searchQ1);
+            DataTable dt1 = service.FetchProducts(searchQ1);
 
             //Get XML string from dbtable, prepare for deserialization
             string tableOneXML = "";
@@ -86,7 +80,7 @@ namespace StockApp
 
             //GET TABLE 2
             string searchQ2 = "SELECT TOP 1 * FROM Compare WHERE UserId = " + Global.thisUser.Id + " ORDER BY id DESC";
-            DataTable dt2 = FetchProducts(searchQ2);
+            DataTable dt2 = service.FetchProducts(searchQ2);
 
             //Get XML string from dbtable, prepare for deserialization
             string tableTwoXML = "";
@@ -162,18 +156,18 @@ namespace StockApp
 
         }
 
-        public DataTable FetchProducts(string query)
-        {
-            SqlCommand cmd2 = con.CreateCommand();
-            cmd2.CommandType = CommandType.Text;
-            cmd2.CommandText = query;
-            cmd2.ExecuteNonQuery();
+        //public DataTable FetchProducts(string query)
+        //{
+        //    SqlCommand cmd2 = con.CreateCommand();
+        //    cmd2.CommandType = CommandType.Text;
+        //    cmd2.CommandText = query;
+        //    cmd2.ExecuteNonQuery();
 
-            DataTable dt1 = new DataTable();
-            SqlDataAdapter da1 = new SqlDataAdapter(cmd2);
-            da1.Fill(dt1);
-            return dt1;
-        }
+        //    DataTable dt1 = new DataTable();
+        //    SqlDataAdapter da1 = new SqlDataAdapter(cmd2);
+        //    da1.Fill(dt1);
+        //    return dt1;
+        //}
 
         private void Chart1btn_Click(object sender, RoutedEventArgs e)
         {

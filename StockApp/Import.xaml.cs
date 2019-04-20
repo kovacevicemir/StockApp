@@ -5,21 +5,12 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
+using StockApp.ServiceReference1;
 
 namespace StockApp
 {
@@ -28,10 +19,12 @@ namespace StockApp
     /// </summary>
     public partial class Import : Window
     {
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
         List<string> colNames1 = new List<string>();
         DataTable dataTable = new DataTable();
         int isLabel1 = 0;
+
+        Service1Client service = new Service1Client();
         public Import()
         {
             InitializeComponent();
@@ -42,11 +35,11 @@ namespace StockApp
             this.Icon = BitmapFrame.Create(iconUri);
 
             //check for connection state
-            if (con.State == System.Data.ConnectionState.Open)
-            {
-                con.Close();
-            }
-            con.Open();
+            //if (con.State == System.Data.ConnectionState.Open)
+            //{
+            //    con.Close();
+            //}
+            //con.Open();
         }
 
         private void Import_Drop(object sender, DragEventArgs e)
@@ -237,34 +230,84 @@ namespace StockApp
 
         }
 
+        //private void CompareBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    string Compare = "";
+        //    SqlCommand cmd3 = con.CreateCommand();
+        //    cmd3.CommandType = CommandType.Text;
+
+        //    //Compare last search since user loged in
+        //    if (dataTable.Rows.Count > 0)
+        //    {
+        //        //Serialise search and save to DB
+        //        Compare = Global.SerializeTableToString(dataTable);
+
+        //        MessageBox.Show("Dt2 rows > 0, Search to XML...");
+        //    }
+        //    else //Compare last search when user last loged in
+        //    {
+        //        Compare = Global.SerializeTableToString(dataTable);
+
+        //        MessageBox.Show("dt1 Serialized successfully");
+        //    }
+
+        //    //Check -> save string Compare to CompareOne or CompareTwo in db...
+        //    if (Global.compare1)
+        //    {
+        //        Global.compare2 = true;
+        //        Global.compare1 = false;
+        //        cmd3.CommandText = "UPDATE Compare SET CompareTwo = '" + Compare + "' WHERE (UserId = '" + Global.thisUser.Id + "') AND (CompareTwo = 'None')";
+        //        cmd3.ExecuteNonQuery();
+        //        MessageBox.Show("Updated!");
+        //    }
+        //    else
+        //    {
+        //        Global.compare1 = true;
+        //        Global.compare2 = false;
+
+        //        string x = "None";
+
+        //        cmd3.CommandText = "INSERT INTO Compare VALUES ('" + Global.thisUser.Id + "', '" + Compare + "', '" + x + "')";
+        //        cmd3.ExecuteNonQuery();
+        //        MessageBox.Show("Inserted!");
+
+        //    }
+
+        //    if (Global.compare1)
+        //    {
+        //        MessageBox.Show("Compare 1 is true");
+        //    }
+
+        //    if (Global.compare2)
+        //    {
+        //        MessageBox.Show("Compare 2 is true");
+        //        //Open Compare Window
+        //        var CompareWin = new Compare();
+        //        CompareWin.Show();
+        //    }
+
+        //}
+
         private void CompareBtn_Click(object sender, RoutedEventArgs e)
         {
             string Compare = "";
-            SqlCommand cmd3 = con.CreateCommand();
-            cmd3.CommandType = CommandType.Text;
+          
+            //Serialise search and save to DB
+            Compare = Global.SerializeTableToString(dataTable);
 
-            //Compare last search since user loged in
-            if (dataTable.Rows.Count > 0)
-            {
-                //Serialise search and save to DB
-                Compare = Global.SerializeTableToString(dataTable);
-
-                MessageBox.Show("Dt2 rows > 0, Search to XML...");
-            }
-            else //Compare last search when user last loged in
-            {
-                Compare = Global.SerializeTableToString(dataTable);
-
-                MessageBox.Show("dt1 Serialized successfully");
-            }
 
             //Check -> save string Compare to CompareOne or CompareTwo in db...
             if (Global.compare1)
             {
                 Global.compare2 = true;
                 Global.compare1 = false;
-                cmd3.CommandText = "UPDATE Compare SET CompareTwo = '" + Compare + "' WHERE (UserId = '" + Global.thisUser.Id + "') AND (CompareTwo = 'None')";
-                cmd3.ExecuteNonQuery();
+
+                int updateCompare = service.updateCompare(Compare, Global.thisUser.Id);
+                if (updateCompare != 1)
+                {
+                    MessageBox.Show("Compare 2, not saved something went wrong!");
+                }
+
                 MessageBox.Show("Updated!");
             }
             else
@@ -272,10 +315,12 @@ namespace StockApp
                 Global.compare1 = true;
                 Global.compare2 = false;
 
-                string x = "None";
+                int insertCompare = service.insertCompare(Compare, Global.thisUser.Id);
+                if (insertCompare != 1)
+                {
+                    MessageBox.Show("Compare table one is not saved, something went wrong!");
+                }
 
-                cmd3.CommandText = "INSERT INTO Compare VALUES ('" + Global.thisUser.Id + "', '" + Compare + "', '" + x + "')";
-                cmd3.ExecuteNonQuery();
                 MessageBox.Show("Inserted!");
 
             }

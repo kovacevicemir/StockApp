@@ -589,6 +589,18 @@ namespace StockApp.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/insertCompare", ReplyAction="http://tempuri.org/IService1/insertCompareResponse")]
         System.Threading.Tasks.Task<int> insertCompareAsync(string Compare, int userId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetMemberByUsername", ReplyAction="http://tempuri.org/IService1/GetMemberByUsernameResponse")]
+        System.Data.DataTable GetMemberByUsername(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetMemberByUsername", ReplyAction="http://tempuri.org/IService1/GetMemberByUsernameResponse")]
+        System.Threading.Tasks.Task<System.Data.DataTable> GetMemberByUsernameAsync(string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/insertMember", ReplyAction="http://tempuri.org/IService1/insertMemberResponse")]
+        int insertMember(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/insertMember", ReplyAction="http://tempuri.org/IService1/insertMemberResponse")]
+        System.Threading.Tasks.Task<int> insertMemberAsync(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -688,6 +700,22 @@ namespace StockApp.ServiceReference1 {
         
         public System.Threading.Tasks.Task<int> insertCompareAsync(string Compare, int userId) {
             return base.Channel.insertCompareAsync(Compare, userId);
+        }
+        
+        public System.Data.DataTable GetMemberByUsername(string username) {
+            return base.Channel.GetMemberByUsername(username);
+        }
+        
+        public System.Threading.Tasks.Task<System.Data.DataTable> GetMemberByUsernameAsync(string username) {
+            return base.Channel.GetMemberByUsernameAsync(username);
+        }
+        
+        public int insertMember(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch) {
+            return base.Channel.insertMember(nickname, fname, lname, email, password, allSearch, historySearch, liveSearch);
+        }
+        
+        public System.Threading.Tasks.Task<int> insertMemberAsync(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch) {
+            return base.Channel.insertMemberAsync(nickname, fname, lname, email, password, allSearch, historySearch, liveSearch);
         }
     }
 }

@@ -62,6 +62,18 @@
   <wsdl:message name="IService1_insertCompare_OutputMessage">
     <wsdl:part name="parameters" element="tns:insertCompareResponse" />
   </wsdl:message>
+  <wsdl:message name="IService1_GetMemberByUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMemberByUsername" />
+  </wsdl:message>
+  <wsdl:message name="IService1_GetMemberByUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMemberByUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService1_insertMember_InputMessage">
+    <wsdl:part name="parameters" element="tns:insertMember" />
+  </wsdl:message>
+  <wsdl:message name="IService1_insertMember_OutputMessage">
+    <wsdl:part name="parameters" element="tns:insertMemberResponse" />
+  </wsdl:message>
   <wsdl:portType name="IService1">
     <wsdl:operation name="GetData">
       <wsdl:input wsaw:Action="http://tempuri.org/IService1/GetData" message="tns:IService1_GetData_InputMessage" />
@@ -98,6 +110,14 @@
     <wsdl:operation name="insertCompare">
       <wsdl:input wsaw:Action="http://tempuri.org/IService1/insertCompare" message="tns:IService1_insertCompare_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService1/insertCompareResponse" message="tns:IService1_insertCompare_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberByUsername">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/GetMemberByUsername" message="tns:IService1_GetMemberByUsername_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/GetMemberByUsernameResponse" message="tns:IService1_GetMemberByUsername_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="insertMember">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService1/insertMember" message="tns:IService1_insertMember_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService1/insertMemberResponse" message="tns:IService1_insertMember_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IService1" type="tns:IService1">
@@ -176,6 +196,24 @@
     </wsdl:operation>
     <wsdl:operation name="insertCompare">
       <soap:operation soapAction="http://tempuri.org/IService1/insertCompare" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMemberByUsername">
+      <soap:operation soapAction="http://tempuri.org/IService1/GetMemberByUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="insertMember">
+      <soap:operation soapAction="http://tempuri.org/IService1/insertMember" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

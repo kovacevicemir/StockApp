@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Data;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
 namespace StockWcf
 {
@@ -39,6 +34,12 @@ namespace StockWcf
 
         [OperationContract]
         int insertCompare(string Compare, int userId);
+
+        [OperationContract]
+        DataTable GetMemberByUsername(string username);
+
+        [OperationContract]
+        int insertMember(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch);
 
 
         //[OperationContract]

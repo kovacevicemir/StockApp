@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using StockApp.Models;
+using StockApp.ServiceReference1;
+using Member = StockApp.ServiceReference1.Member;
 
 namespace StockApp
 {
@@ -24,8 +15,8 @@ namespace StockApp
     /// </summary>
     public partial class Registration : Window
     {
-
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        Service1Client service = new Service1Client();
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
         Member new_member = new Member();
         public Registration()
         {
@@ -37,11 +28,11 @@ namespace StockApp
 
 
             //check for connection state
-            if (con.State == System.Data.ConnectionState.Open)
-            {
-                con.Close();
-            }
-            con.Open();
+            //if (con.State == System.Data.ConnectionState.Open)
+            //{
+            //    con.Close();
+            //}
+            //con.Open();
         }
 
         //SUBMIT REGISTRATION BUTTON HANDLER
@@ -57,46 +48,68 @@ namespace StockApp
             //VERIFY ALL INPUTS:
             //Username verification
             var username_verification = Verification(new_member.username);
-                if(username_verification == false) { return; }
+            if(username_verification == false) { return; }
 
-                //Firstname verification
-                var firstname_verification = Verification(new_member.firstname);
-                if (firstname_verification == false) { return; }
+            //Firstname verification
+            var firstname_verification = Verification(new_member.firstname);
+            if (firstname_verification == false) { return; }
 
-                //Lastname verification
-                var lastname_verification = Verification(new_member.lastname);
-                if (lastname_verification == false) { return; }
+            //Lastname verification
+            var lastname_verification = Verification(new_member.lastname);
+            if (lastname_verification == false) { return; }
 
-                //Password verification
-                var password_verification = Verification(new_member.password);
-                if (password_verification == false) { return; }
+            //Password verification
+            var password_verification = Verification(new_member.password);
+            if (password_verification == false) { return; }
+
+            //Email
+            if(new_member.email == "")
+            {
+                new_member.email = "none";
+            }
+
+            //SearchHistory for new user
+            new_member.lastSearchAll = "none";
+            new_member.lastSearchHistory = "none";
+            new_member.lastSearchLive = "none";
 
 
 
-            //Create Query command that select username where username = username_input
             int i = 0;
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = "select * from Users where username='" + new_member.username + "'";
-            cmd.ExecuteNonQuery();
 
-            //Create data table with all usernames that are = username_input
-            DataTable dt = new DataTable();
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(dt);
+            ////Create Query command that select username where username = username_input
+            //SqlCommand cmd = con.CreateCommand();
+            //cmd.CommandType = System.Data.CommandType.Text;
+            //cmd.CommandText = "select * from Users where username='" + new_member.username + "'";
+            //cmd.ExecuteNonQuery();
+
+            ////Create data table with all usernames that are = username_input
+            //DataTable dt = new DataTable();
+            //SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //da.Fill(dt);
+
+            DataTable dt = service.GetMemberByUsername(new_member.username);
+
 
             //check how many rows in dt (check if there is existing username already in db)
             i = Convert.ToInt32(dt.Rows.Count.ToString());
 
             if (i == 0) //If non-existing username
             {
-                SqlCommand cmd1 = con.CreateCommand();
-                cmd1.CommandType = CommandType.Text;
-                cmd1.CommandText = "insert into Users values('nickname','emir','kovacevic','emir@nesto','sifra')";
-                cmd1.ExecuteNonQuery();
+                //SqlCommand cmd1 = con.CreateCommand();
+                //cmd1.CommandType = CommandType.Text;
+                //cmd1.CommandText = "insert into Users values('nickname','emir','kovacevic','emir@nesto','sifra')";
+                //cmd1.ExecuteNonQuery();
+
+                int insertMember = service.insertMember(new_member.username, new_member.firstname, new_member.lastname, new_member.email, new_member.password, new_member.lastSearchAll, new_member.lastSearchHistory, new_member.lastSearchLive);
+                if(insertMember != 1)
+                {
+                    MessageBox.Show("Something went wrong! Please restart application and try again");
+                }
 
                 //clear error msg
                 errorArea.Visibility = Visibility.Collapsed;
+
                 errorMsg.Text = "";
 
                 //show loading gif.

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
-using System.Runtime.Serialization;
 
 namespace StockWcf
 {
@@ -291,6 +285,65 @@ namespace StockWcf
 
                 cmd3.CommandText = "INSERT INTO Compare VALUES ('" + userId + "', '" + Compare + "', '" + x + "')";
                 cmd3.ExecuteNonQuery();
+
+                return 1;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        public DataTable GetMemberByUsername(string username)
+        {
+            try
+            {
+                conn.Open();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = "select * from Users where username='" + username + "'";
+                cmd.ExecuteNonQuery();
+
+                //Create data table with all usernames that are = username_input
+                DataTable dt = new DataTable("dt");
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dt);
+
+                return dt;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+        }
+
+        public int insertMember(string nickname, string fname, string lname, string email, string password, string allSearch, string historySearch, string liveSearch)
+        {
+            try
+            {
+                conn.Open();
+
+                SqlCommand cmd1 = conn.CreateCommand();
+                cmd1.CommandType = CommandType.Text;
+                cmd1.CommandText = "insert into Users values('"+nickname+ "','" + fname + "','" + lname + "','" + email + "','" + password + "','" + allSearch + "','" + historySearch + "','" + liveSearch + "')";
+                cmd1.ExecuteNonQuery();
 
                 return 1;
             }

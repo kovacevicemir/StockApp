@@ -7,10 +7,8 @@ using System.Windows.Controls;
 using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
-using StockApp.Models;
 using StockApp.ServiceReference1;
 using Nsye = StockApp.ServiceReference1.Nsye;
-using System.Runtime.Serialization;
 
 namespace StockApp
 {
