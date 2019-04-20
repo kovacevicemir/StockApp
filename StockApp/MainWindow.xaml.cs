@@ -152,6 +152,13 @@ namespace StockApp
                 newwindow.Show();
             }
         }
+
+        //App usage button handler
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var AppUsage = new SystemUsage();
+            AppUsage.Show();
+        }
     }
 }
 

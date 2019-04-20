@@ -58,6 +58,13 @@
         <DataGrid x:Name="dataTable" Background="White" Grid.Column="3" Margin="0 10 0 0" Grid.ColumnSpan="6" Grid.Row="1" Grid.RowSpan="6">
             
         </DataGrid>
+
+        <StackPanel Grid.Column="9">
+            <Button Height="20" Width="100" FontSize="12" FontWeight="Normal" Style="{StaticResource LiveButton}" Background="#FF4CBF3B" Click="Button_Click">App Usage</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="8">
+            <Button x:Name="helpBtn" Height="20" Width="100" FontSize="12" FontWeight="Normal" Style="{StaticResource LiveButton}" Background="#FF3B84BF" Click="Button_Click">Help!</Button>
+        </StackPanel>
     </Grid>
     
 </Window>

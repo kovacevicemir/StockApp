@@ -1,0 +1,20 @@
+﻿<Window x:Class="StockApp.SystemUsage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockApp"
+        mc:Ignorable="d"
+        Title="App Usage" MaxHeight="300" MaxWidth="300"
+        MinHeight="300" MinWidth="300">
+    <Grid>
+        <TextBox x:Name="CpuBox" HorizontalAlignment="Left" Height="23" Margin="118,54,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="RamBox" HorizontalAlignment="Left" Height="23" Margin="118,117,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="HddBox" HorizontalAlignment="Left" Height="23" Margin="118,182,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="Cpu" Content="Cpu usage" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="Ram" Content="Ram usage" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="100"/>
+        <ComboBox x:Name="cboDrive" HorizontalAlignment="Left" Margin="10,182,0,0" VerticalAlignment="Top" Width="69"/>
+        <Label x:Name="label" Content="Available space:" HorizontalAlignment="Left" Margin="118,156,0,0" VerticalAlignment="Top" Width="100" FontStyle="Italic" FontSize="10"/>
+
+    </Grid>
+</Window>
