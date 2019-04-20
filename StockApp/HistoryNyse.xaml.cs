@@ -8,6 +8,9 @@ using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using StockApp.Models;
+using StockApp.ServiceReference1;
+using Nsye = StockApp.ServiceReference1.Nsye;
+using System.Runtime.Serialization;
 
 namespace StockApp
 {
@@ -16,8 +19,10 @@ namespace StockApp
     /// </summary>
     public partial class HistoryNyse : Window
     {
-        SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename='C:\Projects\Assignment 3\StockApp\StockApp\StockApp.mdf';Integrated Security=True");
         string lastSearchHistory = "";
+
+        Service1Client service = new Service1Client();
 
         //Create dataTabes here, so they can be used in SAVE button handler
         DataTable dt1 = new DataTable();
@@ -40,11 +45,11 @@ namespace StockApp
             this.Title = Global.AppName + " - History";
 
             //check for connection state
-            if (con.State == System.Data.ConnectionState.Open)
-            {
-                con.Close();
-            }
-            con.Open();
+            //if (con.State == System.Data.ConnectionState.Open)
+            //{
+            //    con.Close();
+            //}
+            //con.Open();
 
             Display();
         }
@@ -61,8 +66,10 @@ namespace StockApp
         {
             //Select all from nyse_history table
             //Create new datatable and flll it with cmd2
-            string q = "SELECT * FROM nyse_history ORDER BY CONVERT(datetime, date, 103) ASC";
-            dt1 = FetchProducts(q);
+            string q = "SELECT TOP 1000 * FROM nyse_history ORDER BY CONVERT(datetime, date, 103) ASC";
+            //dt1 = FetchProducts(q);
+            
+            dt1 = service.FetchProducts(q);
 
             //Insert data into datagrid_products
             dataGrid_nyse.ItemsSource = dt1.DefaultView;
@@ -102,18 +109,18 @@ namespace StockApp
 
         //FETCH All FROM DB / PUT IT IN DataTable x
         //used only for testing, before stored procedures were implemented
-        public DataTable FetchProducts(string query)
-        {
-            SqlCommand cmd2 = con.CreateCommand();
-            cmd2.CommandType = CommandType.Text;
-            cmd2.CommandText = query;
-            cmd2.ExecuteNonQuery();
+        //public DataTable FetchProducts(string query)
+        //{
+        //    SqlCommand cmd2 = con.CreateCommand();
+        //    cmd2.CommandType = CommandType.Text;
+        //    cmd2.CommandText = query;
+        //    cmd2.ExecuteNonQuery();
 
-            DataTable dt1 = new DataTable();
-            SqlDataAdapter da1 = new SqlDataAdapter(cmd2);
-            da1.Fill(dt1);
-            return dt1;
-        }
+        //    DataTable dt1 = new DataTable();
+        //    SqlDataAdapter da1 = new SqlDataAdapter(cmd2);
+        //    da1.Fill(dt1);
+        //    return dt1;
+        //}
 
         //Stored procedure fetch method
         public DataTable FetchProducts1(SqlCommand cmd5)
@@ -128,7 +135,9 @@ namespace StockApp
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
             //Store search inputs into Search (Nsye model)
-            Search = new Nsye();
+            Search = new ServiceReference1.Nsye();
+
+            //GET ALL INPUTS, AND SET DEFAULT VALUES IF THERE IS NO INPUT
 
             //Exchange
             Search.exchange = exchangeInput.SelectedValue.ToString();
@@ -141,10 +150,18 @@ namespace StockApp
             {
                 Search.stock_price_open_from = float.Parse(openFromInput.Text);
             }
+            else
+            {
+                Search.stock_price_open_from = 1;
+            }
 
             if (openToInput.Text != "")
             {
                 Search.stock_price_open_to = float.Parse(openToInput.Text);
+            }
+            else
+            {
+                Search.stock_price_open_to = 20;
             }
 
             //Close
@@ -152,10 +169,18 @@ namespace StockApp
             {
                 Search.stock_price_close_from = float.Parse(closeInputFrom.Text);
             }
+            else
+            {
+                Search.stock_price_close_from = 1;
+            }
 
             if (closeInputTo.Text != "")
             {
                 Search.stock_price_close_to = float.Parse(closeInputTo.Text);
+            }
+            else
+            {
+                Search.stock_price_close_to = 20;
             }
 
             //High
@@ -163,10 +188,18 @@ namespace StockApp
             {
                 Search.stock_price_high_from = float.Parse(highInputFrom.Text);
             }
+            else
+            {
+                Search.stock_price_high_from = 1;
+            }
 
             if (highInputTo.Text != "")
             {
                 Search.stock_price_high_to = float.Parse(highInputTo.Text);
+            }
+            else
+            {
+                Search.stock_price_high_to = 20;
             }
 
             //Low
@@ -174,10 +207,18 @@ namespace StockApp
             {
                 Search.stock_price_low_from = float.Parse(lowInputFrom.Text);
             }
+            else
+            {
+                Search.stock_price_low_from = 1;
+            }
 
             if (lowInputTo.Text != "")
             {
                 Search.stock_price_low_to = float.Parse(lowInputTo.Text);
+            }
+            else
+            {
+                Search.stock_price_low_to = 20;
             }
 
             //Volume
@@ -185,10 +226,18 @@ namespace StockApp
             {
                 Search.stock_volume_from = int.Parse(volumeInputFrom.Text);
             }
+            else
+            {
+                Search.stock_volume_from = 1;
+            }
 
             if (volumeInputTo.Text != "")
             {
                 Search.stock_volume_to = int.Parse(volumeInputTo.Text);
+            }
+            else
+            {
+                Search.stock_volume_to = 9999999;
             }
 
             //Adj
@@ -196,10 +245,18 @@ namespace StockApp
             {
                 Search.stock_price_adj_close_from = float.Parse(adjInputFrom.Text);
             }
+            else
+            {
+                Search.stock_price_adj_close_from = 1;
+            }
 
             if (adjInputTo.Text != "")
             {
                 Search.stock_price_adj_close_to = float.Parse(adjInputTo.Text);
+            }
+            else
+            {
+                Search.stock_price_adj_close_to = 20;
             }
 
             //Date
@@ -207,10 +264,18 @@ namespace StockApp
             {
                 Search.date_from = dateFrom.SelectedDate.Value.ToString("d/MM/yyyy");
             }
+            else
+            {
+                Search.date_from = "10/10/1999";
+            }
 
             if (dateTo.SelectedDate != null)
             {
                 Search.date_to = dateTo.SelectedDate.Value.ToString("d/MM/yyyy");
+            }
+            else
+            {
+                Search.date_to = "10/10/2020";
             }
 
 
@@ -225,31 +290,32 @@ namespace StockApp
 
 
             //CALL STORED PROCEDURE WHICH RETURN SEARCH FROM DB
-            using (SqlCommand cmd = new SqlCommand("SearchData", con))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
+            //using (SqlCommand cmd = new SqlCommand("SearchData", con))
+            //{
+            //    cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.Add("@exchange", SqlDbType.VarChar).Value = Search.exchange;
-                cmd.Parameters.Add("@symbol", SqlDbType.VarChar).Value = Search.stock_symbol;
-                cmd.Parameters.Add("@dateFrom", SqlDbType.VarChar).Value = Search.date_from;
-                cmd.Parameters.Add("@dateTo", SqlDbType.VarChar).Value = Search.date_to;
-                cmd.Parameters.Add("@priceOpenFrom", SqlDbType.VarChar).Value = Search.stock_price_open_from;
-                cmd.Parameters.Add("@priceOpenTo", SqlDbType.VarChar).Value = Search.stock_price_open_to;
-                cmd.Parameters.Add("@priceHighFrom", SqlDbType.VarChar).Value = Search.stock_price_high_from;
-                cmd.Parameters.Add("@priceHighTo", SqlDbType.VarChar).Value = Search.stock_price_high_to;
-                cmd.Parameters.Add("@priceCloseFrom", SqlDbType.VarChar).Value = Search.stock_price_close_from;
-                cmd.Parameters.Add("@priceCloseTo", SqlDbType.VarChar).Value = Search.stock_price_close_to;
-                cmd.Parameters.Add("@priceLowFrom", SqlDbType.VarChar).Value = Search.stock_price_low_from;
-                cmd.Parameters.Add("@priceLowTo", SqlDbType.VarChar).Value = Search.stock_price_low_to;
-                cmd.Parameters.Add("@adjFrom", SqlDbType.VarChar).Value = Search.stock_price_adj_close_from;
-                cmd.Parameters.Add("@adjTo", SqlDbType.VarChar).Value = Search.stock_price_adj_close_to;
-                cmd.Parameters.Add("@volumeFrom", SqlDbType.VarChar).Value = Search.stock_volume_from;
-                cmd.Parameters.Add("@volumeTo", SqlDbType.VarChar).Value = Search.stock_volume_to;
+            //    cmd.Parameters.Add("@exchange", SqlDbType.VarChar).Value = Search.exchange;
+            //    cmd.Parameters.Add("@symbol", SqlDbType.VarChar).Value = Search.stock_symbol;
+            //    cmd.Parameters.Add("@dateFrom", SqlDbType.VarChar).Value = Search.date_from;
+            //    cmd.Parameters.Add("@dateTo", SqlDbType.VarChar).Value = Search.date_to;
+            //    cmd.Parameters.Add("@priceOpenFrom", SqlDbType.VarChar).Value = Search.stock_price_open_from;
+            //    cmd.Parameters.Add("@priceOpenTo", SqlDbType.VarChar).Value = Search.stock_price_open_to;
+            //    cmd.Parameters.Add("@priceHighFrom", SqlDbType.VarChar).Value = Search.stock_price_high_from;
+            //    cmd.Parameters.Add("@priceHighTo", SqlDbType.VarChar).Value = Search.stock_price_high_to;
+            //    cmd.Parameters.Add("@priceCloseFrom", SqlDbType.VarChar).Value = Search.stock_price_close_from;
+            //    cmd.Parameters.Add("@priceCloseTo", SqlDbType.VarChar).Value = Search.stock_price_close_to;
+            //    cmd.Parameters.Add("@priceLowFrom", SqlDbType.VarChar).Value = Search.stock_price_low_from;
+            //    cmd.Parameters.Add("@priceLowTo", SqlDbType.VarChar).Value = Search.stock_price_low_to;
+            //    cmd.Parameters.Add("@adjFrom", SqlDbType.VarChar).Value = Search.stock_price_adj_close_from;
+            //    cmd.Parameters.Add("@adjTo", SqlDbType.VarChar).Value = Search.stock_price_adj_close_to;
+            //    cmd.Parameters.Add("@volumeFrom", SqlDbType.VarChar).Value = Search.stock_volume_from;
+            //    cmd.Parameters.Add("@volumeTo", SqlDbType.VarChar).Value = Search.stock_volume_to;
 
 
-                cmd.ExecuteNonQuery();
+            //    cmd.ExecuteNonQuery();
 
-                dt2 = FetchProducts1(cmd);
+                //Call WCF -> to db stored procedure for search history data
+                dt2 = service.SearchData(Search);
 
                 //Insert data into datagrid_products
                 dataGrid_nyse.ItemsSource = dt2.DefaultView;
@@ -258,14 +324,19 @@ namespace StockApp
                 //Serialise Search and store in database
                 lastSearchHistory = Global.SerializeToXml(Search);
 
-                SqlCommand cmd3 = con.CreateCommand();
-                cmd3.CommandType = CommandType.Text;
-                cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchHistory = '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
-                cmd3.ExecuteNonQuery();
+            //SqlCommand cmd3 = con.CreateCommand();
+            //cmd3.CommandType = CommandType.Text;
+            //cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchAll= '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
+            //cmd3.ExecuteNonQuery();
+
+                int SearchToDb = service.lastSearch(lastSearchHistory, Global.thisUser.Id);
+                if(SearchToDb != 1)
+                {
+                    MessageBox.Show("Last Search is not saved to history search, something went wrong!");
+                }
 
                 //update number of results
                 noResults.Text = "Number of results: " + dt2.Rows.Count.ToString();
-
 
                 //Fill Visualise by: combo box:
                 foreach (DataColumn column in dt2.Columns)
@@ -291,7 +362,7 @@ namespace StockApp
                 visualiseInputBy.Items.Remove("stock_symbol");
                 visualiseInputBy.Items.Remove("exchange");
 
-            }
+            //}
         }
 
         //COMBOBOX
@@ -300,15 +371,18 @@ namespace StockApp
             comboBox.Items.Clear();
 
             //Select all from units table
-            SqlCommand cmd = con.CreateCommand();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = "SELECT DISTINCT " +header+ " FROM nyse_history";
-            cmd.ExecuteNonQuery();
+            //SqlCommand cmd = con.CreateCommand();
+            //cmd.CommandType = CommandType.Text;
+            //cmd.CommandText = "SELECT DISTINCT " +header+ " FROM nyse_history";
+            //cmd.ExecuteNonQuery();
 
-            //create new datatable and fill with cmd
+            ////create new datatable and fill with cmd
+            //DataTable dt = new DataTable();
+            //SqlDataAdapter da = new SqlDataAdapter(cmd);
+            //da.Fill(dt);
+
             DataTable dt = new DataTable();
-            SqlDataAdapter da = new SqlDataAdapter(cmd);
-            da.Fill(dt);
+            dt = service.selectHeaders("nyse_history", header);
 
             //iterate dt and add each row ["unit"] to combo box item
             foreach (DataRow row in dt.Rows)
@@ -434,9 +508,7 @@ namespace StockApp
         private void CompareBtn_Click(object sender, RoutedEventArgs e)
         {
             string Compare = "";
-            SqlCommand cmd3 = con.CreateCommand();
-            cmd3.CommandType = CommandType.Text;
-
+            
             //Compare last search since user loged in
             if (dt2.Rows.Count > 0)
             {
@@ -457,8 +529,13 @@ namespace StockApp
             {
                 Global.compare2 = true;
                 Global.compare1 = false;
-                cmd3.CommandText = "UPDATE Compare SET CompareTwo = '" + Compare + "' WHERE (UserId = '" + Global.thisUser.Id + "') AND (CompareTwo = 'None')";
-                cmd3.ExecuteNonQuery();
+
+                int updateCompare = service.updateCompare(Compare, Global.thisUser.Id);
+                if(updateCompare != 1)
+                {
+                    MessageBox.Show("Compare 2, not saved something went wrong!");
+                }
+
                 MessageBox.Show("Updated!");
             }
             else
@@ -466,10 +543,12 @@ namespace StockApp
                 Global.compare1 = true;
                 Global.compare2 = false;
 
-                string x = "None";
+                int insertCompare = service.insertCompare(Compare, Global.thisUser.Id);
+                if(insertCompare !=1)
+                {
+                    MessageBox.Show("Compare table one is not saved, something went wrong!");
+                }
 
-                cmd3.CommandText = "INSERT INTO Compare VALUES ('" + Global.thisUser.Id + "', '" + Compare + "', '" +x+ "')";
-                cmd3.ExecuteNonQuery();
                 MessageBox.Show("Inserted!");
 
             }

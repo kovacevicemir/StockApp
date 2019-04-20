@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/StockWcf" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/StockWcf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="CompositeType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BoolValue" type="xs:boolean" />
+      <xs:element minOccurs="0" name="StringValue" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompositeType" nillable="true" type="tns:CompositeType" />
+  <xs:complexType name="Member">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastSearchAll" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastSearchHistory" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastSearchLive" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Member" nillable="true" type="tns:Member" />
+  <xs:complexType name="Nsye">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="date_from" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="date_to" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="exchange" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="stock_price_adj_close_from" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_adj_close_to" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_close_from" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_close_to" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_high_from" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_high_to" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_low_from" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_low_to" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_open_from" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_price_open_to" type="xs:float" />
+      <xs:element minOccurs="0" name="stock_symbol" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="stock_volume_from" type="xs:int" />
+      <xs:element minOccurs="0" name="stock_volume_to" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Nsye" nillable="true" type="tns:Nsye" />
+</xs:schema>
