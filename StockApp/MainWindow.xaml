@@ -44,8 +44,8 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        
-        <Button Grid.Row="1" Grid.Column="1"  Content="LIVE" Style="{StaticResource LiveButton}" Background="#FFDD6C6C"></Button>
+
+        <Button x:Name="liveBtn" Grid.Row="1" Grid.Column="1"  Content="LIVE" Style="{StaticResource LiveButton}" Background="#FFDD6C6C" Click="LiveBtn_Click"></Button>
         <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Watch stock details in real time ! Only 5 request per day for regular users. Upgrade to VIP for unlimited requests</TextBlock>
         
         <Button x:Name="historyBtn" Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" Click="HistoryBtn_Click" ></Button>
@@ -63,7 +63,7 @@
             <Button Height="20" Width="100" FontSize="12" FontWeight="Normal" Style="{StaticResource LiveButton}" Background="#FF4CBF3B" Click="Button_Click">App Usage</Button>
         </StackPanel>
         <StackPanel Grid.Column="8">
-            <Button x:Name="helpBtn" Height="20" Width="100" FontSize="12" FontWeight="Normal" Style="{StaticResource LiveButton}" Background="#FF3B84BF" Click="Button_Click">Help!</Button>
+            <Button x:Name="helpBtn" Height="20" Width="100" FontSize="12" FontWeight="Normal" Style="{StaticResource LiveButton}" Background="#FF3B84BF" Click="HelpBtn_Click">Help!</Button>
         </StackPanel>
     </Grid>
     

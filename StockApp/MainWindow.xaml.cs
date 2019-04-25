@@ -159,6 +159,17 @@ namespace StockApp
             var AppUsage = new SystemUsage();
             AppUsage.Show();
         }
+
+        private void HelpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var Help = new Help();
+            Help.Show();
+        }
+
+        private void LiveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Live feature will be available in future thank you for your patience...");
+        }
     }
 }
 

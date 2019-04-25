@@ -36,6 +36,10 @@ namespace StockApp
             //Start the Timer
             dispatcherTimer.Start();
 
+            this.Title = "App Usage";
+            Uri iconUri = new Uri("pack://application:,,,/dollar.png", UriKind.RelativeOrAbsolute);
+            this.Icon = BitmapFrame.Create(iconUri);
+
             foreach (DriveInfo di in DriveInfo.GetDrives())
             {
                 cboDrive.Items.Add(di.Name);
