@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using Nsye = StockApp.ServiceReference1.Nsye;
@@ -22,6 +23,9 @@ namespace StockApp
         public MainWindow()
         {
             InitializeComponent();
+
+            //Key Listener
+            this.PreviewKeyDown += new KeyEventHandler(HandleKey);
 
             this.Title = Global.AppName + " - Home";
             Uri iconUri = new Uri("pack://application:,,,/dollar.png", UriKind.RelativeOrAbsolute);
@@ -156,19 +160,74 @@ namespace StockApp
         //App usage button handler
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var AppUsage = new SystemUsage();
-            AppUsage.Show();
+            try
+            {
+                var AppUsage = new SystemUsage();
+                AppUsage.Show();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         private void HelpBtn_Click(object sender, RoutedEventArgs e)
         {
-            var Help = new Help();
-            Help.Show();
+            try
+            {
+                var Help = new Help();
+                Help.Show();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         private void LiveBtn_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Live feature will be available in future thank you for your patience...");
+        }
+
+        //keyboard button handler :::
+        private void HandleKey(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.H)
+            {
+                var history = new HistoryNyse();
+                history.Show();
+                this.Close();
+            }
+            
+            if(e.Key == Key.I)
+            {
+                //Prevent multiple import windows to be opened
+                foreach (Window w in Application.Current.Windows)
+                {
+                    if (w is Import)
+                    {
+                        isWindowOpen = true;
+                        w.Activate();
+                    }
+                }
+
+                //If import window is not open
+                if (!isWindowOpen)
+                {
+                    Import newwindow = new Import();
+                    newwindow.Show();
+                }
+
+            }
+
         }
     }
 }

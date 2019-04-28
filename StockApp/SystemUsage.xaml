@@ -15,6 +15,6 @@
         <Label x:Name="Ram" Content="Ram usage" HorizontalAlignment="Left" Margin="10,117,0,0" VerticalAlignment="Top" Width="100"/>
         <ComboBox x:Name="cboDrive" HorizontalAlignment="Left" Margin="10,182,0,0" VerticalAlignment="Top" Width="69"/>
         <Label x:Name="label" Content="Available space:" HorizontalAlignment="Left" Margin="118,156,0,0" VerticalAlignment="Top" Width="100" FontStyle="Italic" FontSize="10"/>
-
+        <Button x:Name="logPathway" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="Only for admins or IT support!" Height="20" Width="238" Margin="25,10,0,0" Click="LogPathway_Click">Click to find custom Log.txt file path</Button>
     </Grid>
 </Window>

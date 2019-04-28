@@ -38,44 +38,61 @@ namespace StockApp
 
         private async void Login_btn_Click(object sender, RoutedEventArgs e)
         {
-            //Animation gif.
-            loader.Visibility = Visibility.Visible;
-            await Task.Run(() => Thread.Sleep(2000));
-            loader.Visibility = Visibility.Collapsed;
-
-            //get login details
-            Member member_login = new ServiceReference1.Member();
-            member_login.username = username_input.Text;
-            member_login.password = password_input.Password.ToString();
-            member_login.email = "temp";
-            member_login.firstname = "temp";
-            member_login.lastname = "temp";
-            member_login.Id = 1;
-            member_login.lastSearchAll = "temp";
-            member_login.lastSearchLive = "temp";
-            member_login.lastSearchHistory = "temp";
-
-            //remove white spaces
-            Regex.Replace(member_login.username, @"\s+", "");
-            Regex.Replace(member_login.password, @"\s+", "");
-
-            List<Member> MemberL = new List<Member>();
-            Service1Client service = new Service1Client();
-            MemberL.Add(service.GetMember(member_login));
-
-            if(MemberL[0].username == member_login.username && MemberL[0].password == member_login.password)
+            try
             {
-                Global.thisUser.Id = MemberL[0].Id;
+                //Disable login button -> prevent mutiple client
+                Login_btn.IsEnabled = false;
 
-                await Task.Run(() => Thread.Sleep(1000));
-                var homepage = new MainWindow();
-                homepage.Show();
-                this.Close();
+                //Animation gif.
+                loader.Visibility = Visibility.Visible;
+                await Task.Run(() => Thread.Sleep(2000));
+                loader.Visibility = Visibility.Collapsed;
+
+                //get login details
+                Member member_login = new ServiceReference1.Member();
+                member_login.username = username_input.Text;
+                member_login.password = password_input.Password.ToString();
+                member_login.email = "temp";
+                member_login.firstname = "temp";
+                member_login.lastname = "temp";
+                member_login.Id = 1;
+                member_login.lastSearchAll = "temp";
+                member_login.lastSearchLive = "temp";
+                member_login.lastSearchHistory = "temp";
+
+                //remove white spaces
+                Regex.Replace(member_login.username, @"\s+", "");
+                Regex.Replace(member_login.password, @"\s+", "");
+
+                List<Member> MemberL = new List<Member>();
+                Service1Client service = new Service1Client();
+                MemberL.Add(service.GetMember(member_login));
+
+                if (MemberL[0].username == member_login.username && MemberL[0].password == member_login.password)
+                {
+                    Global.thisUser.Id = MemberL[0].Id;
+
+                    await Task.Run(() => Thread.Sleep(1000));
+                    var homepage = new MainWindow();
+                    homepage.Show();
+                    this.Close();
+
+                }
+                else
+                {
+                    errorArea.Visibility = Visibility.Visible;
+                    errorMsg.Text = "Invalid username or password !";
+                    Login_btn.IsEnabled = true;
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                errorArea.Visibility = Visibility.Visible;
-                errorMsg.Text = "Invalid username or password !";
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+                Login_btn.IsEnabled = true;
             }
 
         }
@@ -139,9 +156,20 @@ namespace StockApp
 
         private void CreateAccBtn_Click(object sender, RoutedEventArgs e)
         {
-            var registration = new Registration();
-            registration.Show();
-            this.Close();
+            try
+            {
+                var registration = new Registration();
+                registration.Show();
+                this.Close();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
@@ -40,6 +41,8 @@ namespace StockApp
         {
             InitializeComponent();
 
+            //Key listener
+            this.PreviewKeyDown += new KeyEventHandler(HandleEsc);
             this.Title = Global.AppName + " - History";
 
             //check for connection state
@@ -49,14 +52,36 @@ namespace StockApp
             //}
             //con.Open();
 
-            Display();
+            try
+            {
+                Display();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         private void HomepageBtn_Click(object sender, RoutedEventArgs e)
         {
-            var homepage = new MainWindow();
-            homepage.Show();
-            this.Close();
+            try
+            {
+                var homepage = new MainWindow();
+                homepage.Show();
+                this.Close();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         //DATAGRID
@@ -64,7 +89,7 @@ namespace StockApp
         {
             //Select all from nyse_history table
             //Create new datatable and flll it with cmd2
-            string q = "SELECT TOP 1000 * FROM nyse_history ORDER BY CONVERT(datetime, date, 103) ASC";
+            string q = "SELECT TOP 10000 * FROM nyse_history ORDER BY CONVERT(datetime, date, 103) ASC";
             //dt1 = FetchProducts(q);
             
             dt1 = service.FetchProducts(q);
@@ -121,199 +146,207 @@ namespace StockApp
         //}
 
         //Stored procedure fetch method
-        public DataTable FetchProducts1(SqlCommand cmd5)
-        {
-            DataTable dt2 = new DataTable();
-            SqlDataAdapter da1 = new SqlDataAdapter(cmd5);
-            da1.Fill(dt2);
-            return dt2;
-        }
+        //public DataTable FetchProducts1(SqlCommand cmd5)
+        //{
+        //    DataTable dt2 = new DataTable();
+        //    SqlDataAdapter da1 = new SqlDataAdapter(cmd5);
+        //    da1.Fill(dt2);
+        //    return dt2;
+        //}
 
         //SEARCH HANDLER
         private void SearchBtn_Click(object sender, RoutedEventArgs e)
         {
-            //Store search inputs into Search (Nsye model)
-            Search = new ServiceReference1.Nsye();
+            try
+            {
+                //Store search inputs into Search (Nsye model)
+                Search = new ServiceReference1.Nsye();
 
-            //GET ALL INPUTS, AND SET DEFAULT VALUES IF THERE IS NO INPUT
+                //GET ALL INPUTS, AND SET DEFAULT VALUES IF THERE IS NO INPUT
 
-            //Exchange
-            Search.exchange = exchangeInput.SelectedValue.ToString();
+                //Exchange
+                Search.exchange = exchangeInput.SelectedValue.ToString();
 
-            //Symbol
-            Search.stock_symbol = symbolInput.SelectedValue.ToString();
+                //Symbol
+                Search.stock_symbol = symbolInput.SelectedValue.ToString();
 
-            //Open
-            if(openFromInput.Text != "")
-            {
-                Search.stock_price_open_from = float.Parse(openFromInput.Text);
-            }
-            else
-            {
-                Search.stock_price_open_from = 1;
-            }
+                //Open
+                if (openFromInput.Text != "")
+                {
+                    Search.stock_price_open_from = float.Parse(openFromInput.Text);
+                }
+                else
+                {
+                    Search.stock_price_open_from = 1;
+                }
 
-            if (openToInput.Text != "")
-            {
-                Search.stock_price_open_to = float.Parse(openToInput.Text);
-            }
-            else
-            {
-                Search.stock_price_open_to = 20;
-            }
+                if (openToInput.Text != "")
+                {
+                    Search.stock_price_open_to = float.Parse(openToInput.Text);
+                }
+                else
+                {
+                    Search.stock_price_open_to = 20;
+                }
 
-            //Close
-            if (closeInputFrom.Text != "")
-            {
-                Search.stock_price_close_from = float.Parse(closeInputFrom.Text);
-            }
-            else
-            {
-                Search.stock_price_close_from = 1;
-            }
+                //Close
+                if (closeInputFrom.Text != "")
+                {
+                    Search.stock_price_close_from = float.Parse(closeInputFrom.Text);
+                }
+                else
+                {
+                    Search.stock_price_close_from = 1;
+                }
 
-            if (closeInputTo.Text != "")
-            {
-                Search.stock_price_close_to = float.Parse(closeInputTo.Text);
-            }
-            else
-            {
-                Search.stock_price_close_to = 20;
-            }
+                if (closeInputTo.Text != "")
+                {
+                    Search.stock_price_close_to = float.Parse(closeInputTo.Text);
+                }
+                else
+                {
+                    Search.stock_price_close_to = 20;
+                }
 
-            //High
-            if (highInputFrom.Text != "")
-            {
-                Search.stock_price_high_from = float.Parse(highInputFrom.Text);
-            }
-            else
-            {
-                Search.stock_price_high_from = 1;
-            }
+                //High
+                if (highInputFrom.Text != "")
+                {
+                    Search.stock_price_high_from = float.Parse(highInputFrom.Text);
+                }
+                else
+                {
+                    Search.stock_price_high_from = 1;
+                }
 
-            if (highInputTo.Text != "")
-            {
-                Search.stock_price_high_to = float.Parse(highInputTo.Text);
-            }
-            else
-            {
-                Search.stock_price_high_to = 20;
-            }
+                if (highInputTo.Text != "")
+                {
+                    Search.stock_price_high_to = float.Parse(highInputTo.Text);
+                }
+                else
+                {
+                    Search.stock_price_high_to = 20;
+                }
 
-            //Low
-            if (lowInputFrom.Text != "")
-            {
-                Search.stock_price_low_from = float.Parse(lowInputFrom.Text);
-            }
-            else
-            {
-                Search.stock_price_low_from = 1;
-            }
+                //Low
+                if (lowInputFrom.Text != "")
+                {
+                    Search.stock_price_low_from = float.Parse(lowInputFrom.Text);
+                }
+                else
+                {
+                    Search.stock_price_low_from = 1;
+                }
 
-            if (lowInputTo.Text != "")
-            {
-                Search.stock_price_low_to = float.Parse(lowInputTo.Text);
-            }
-            else
-            {
-                Search.stock_price_low_to = 20;
-            }
+                if (lowInputTo.Text != "")
+                {
+                    Search.stock_price_low_to = float.Parse(lowInputTo.Text);
+                }
+                else
+                {
+                    Search.stock_price_low_to = 20;
+                }
 
-            //Volume
-            if (volumeInputFrom.Text != "")
-            {
-                Search.stock_volume_from = int.Parse(volumeInputFrom.Text);
-            }
-            else
-            {
-                Search.stock_volume_from = 1;
-            }
+                //Volume
+                if (volumeInputFrom.Text != "")
+                {
+                    Search.stock_volume_from = int.Parse(volumeInputFrom.Text);
+                }
+                else
+                {
+                    Search.stock_volume_from = 1;
+                }
 
-            if (volumeInputTo.Text != "")
-            {
-                Search.stock_volume_to = int.Parse(volumeInputTo.Text);
-            }
-            else
-            {
-                Search.stock_volume_to = 9999999;
-            }
+                if (volumeInputTo.Text != "")
+                {
+                    Search.stock_volume_to = int.Parse(volumeInputTo.Text);
+                }
+                else
+                {
+                    Search.stock_volume_to = 9999999;
+                }
 
-            //Adj
-            if (adjInputFrom.Text != "")
-            {
-                Search.stock_price_adj_close_from = float.Parse(adjInputFrom.Text);
-            }
-            else
-            {
-                Search.stock_price_adj_close_from = 1;
-            }
+                //Adj
+                if (adjInputFrom.Text != "")
+                {
+                    Search.stock_price_adj_close_from = float.Parse(adjInputFrom.Text);
+                }
+                else
+                {
+                    Search.stock_price_adj_close_from = 1;
+                }
 
-            if (adjInputTo.Text != "")
-            {
-                Search.stock_price_adj_close_to = float.Parse(adjInputTo.Text);
-            }
-            else
-            {
-                Search.stock_price_adj_close_to = 20;
-            }
+                if (adjInputTo.Text != "")
+                {
+                    Search.stock_price_adj_close_to = float.Parse(adjInputTo.Text);
+                }
+                else
+                {
+                    Search.stock_price_adj_close_to = 20;
+                }
 
-            //Date
-            if(dateFrom.SelectedDate != null)
-            {
-                Search.date_from = dateFrom.SelectedDate.Value.ToString("d/MM/yyyy");
-            }
-            else
-            {
-                Search.date_from = "10/10/1999";
-            }
+                //Date
+                if (dateFrom.SelectedDate != null)
+                {
+                    Search.date_from = dateFrom.SelectedDate.Value.ToString("d/MM/yyyy");
+                }
+                else
+                {
+                    Search.date_from = "10/10/1999";
+                }
 
-            if (dateTo.SelectedDate != null)
-            {
-                Search.date_to = dateTo.SelectedDate.Value.ToString("d/MM/yyyy");
-            }
-            else
-            {
-                Search.date_to = "10/10/2020";
-            }
-
-
-
-            //Return Search
-            //string date_query = "SELECT * from nyse_history where convert(datetime, date, 103) between CONVERT(datetime, '"+Search.date_from+"', 103) and CONVERT(datetime,'"+Search.date_to+"')";
-            //string open_query = "SELECT * FROM nyse_history WHERE CONVERT(float, stock_price_open)" +" BETWEEN "+Search.stock_price_open_from+ " AND " +Search.stock_price_open_to;
-            //string mix = "SELECT * from nyse_history where (convert(datetime, date, 103) between CONVERT(datetime, '" + Search.date_from + "', 103) and CONVERT(datetime,'" + Search.date_to + "')) " +
-            //    "AND (CONVERT(float, stock_price_open) BETWEEN " + Search.stock_price_open_from + " AND " + Search.stock_price_open_to+
-            //    ") AND (CONVERT(float, stock_price_high) BETWEEN " + Search.stock_price_high_from + " AND " + Search.stock_price_high_to +")";
+                if (dateTo.SelectedDate != null)
+                {
+                    Search.date_to = dateTo.SelectedDate.Value.ToString("d/MM/yyyy");
+                }
+                else
+                {
+                    Search.date_to = "10/10/2020";
+                }
 
 
 
-            //CALL STORED PROCEDURE WHICH RETURN SEARCH FROM DB
-            //using (SqlCommand cmd = new SqlCommand("SearchData", con))
-            //{
-            //    cmd.CommandType = CommandType.StoredProcedure;
-
-            //    cmd.Parameters.Add("@exchange", SqlDbType.VarChar).Value = Search.exchange;
-            //    cmd.Parameters.Add("@symbol", SqlDbType.VarChar).Value = Search.stock_symbol;
-            //    cmd.Parameters.Add("@dateFrom", SqlDbType.VarChar).Value = Search.date_from;
-            //    cmd.Parameters.Add("@dateTo", SqlDbType.VarChar).Value = Search.date_to;
-            //    cmd.Parameters.Add("@priceOpenFrom", SqlDbType.VarChar).Value = Search.stock_price_open_from;
-            //    cmd.Parameters.Add("@priceOpenTo", SqlDbType.VarChar).Value = Search.stock_price_open_to;
-            //    cmd.Parameters.Add("@priceHighFrom", SqlDbType.VarChar).Value = Search.stock_price_high_from;
-            //    cmd.Parameters.Add("@priceHighTo", SqlDbType.VarChar).Value = Search.stock_price_high_to;
-            //    cmd.Parameters.Add("@priceCloseFrom", SqlDbType.VarChar).Value = Search.stock_price_close_from;
-            //    cmd.Parameters.Add("@priceCloseTo", SqlDbType.VarChar).Value = Search.stock_price_close_to;
-            //    cmd.Parameters.Add("@priceLowFrom", SqlDbType.VarChar).Value = Search.stock_price_low_from;
-            //    cmd.Parameters.Add("@priceLowTo", SqlDbType.VarChar).Value = Search.stock_price_low_to;
-            //    cmd.Parameters.Add("@adjFrom", SqlDbType.VarChar).Value = Search.stock_price_adj_close_from;
-            //    cmd.Parameters.Add("@adjTo", SqlDbType.VarChar).Value = Search.stock_price_adj_close_to;
-            //    cmd.Parameters.Add("@volumeFrom", SqlDbType.VarChar).Value = Search.stock_volume_from;
-            //    cmd.Parameters.Add("@volumeTo", SqlDbType.VarChar).Value = Search.stock_volume_to;
+                //Return Search
+                //string date_query = "SELECT * from nyse_history where convert(datetime, date, 103) between CONVERT(datetime, '"+Search.date_from+"', 103) and CONVERT(datetime,'"+Search.date_to+"')";
+                //string open_query = "SELECT * FROM nyse_history WHERE CONVERT(float, stock_price_open)" +" BETWEEN "+Search.stock_price_open_from+ " AND " +Search.stock_price_open_to;
+                //string mix = "SELECT * from nyse_history where (convert(datetime, date, 103) between CONVERT(datetime, '" + Search.date_from + "', 103) and CONVERT(datetime,'" + Search.date_to + "')) " +
+                //    "AND (CONVERT(float, stock_price_open) BETWEEN " + Search.stock_price_open_from + " AND " + Search.stock_price_open_to+
+                //    ") AND (CONVERT(float, stock_price_high) BETWEEN " + Search.stock_price_high_from + " AND " + Search.stock_price_high_to +")";
 
 
-            //    cmd.ExecuteNonQuery();
+
+                //CALL STORED PROCEDURE WHICH RETURN SEARCH FROM DB
+                //using (SqlCommand cmd = new SqlCommand("SearchData", con))
+                //{
+                //    cmd.CommandType = CommandType.StoredProcedure;
+
+                //    cmd.Parameters.Add("@exchange", SqlDbType.VarChar).Value = Search.exchange;
+                //    cmd.Parameters.Add("@symbol", SqlDbType.VarChar).Value = Search.stock_symbol;
+                //    cmd.Parameters.Add("@dateFrom", SqlDbType.VarChar).Value = Search.date_from;
+                //    cmd.Parameters.Add("@dateTo", SqlDbType.VarChar).Value = Search.date_to;
+                //    cmd.Parameters.Add("@priceOpenFrom", SqlDbType.VarChar).Value = Search.stock_price_open_from;
+                //    cmd.Parameters.Add("@priceOpenTo", SqlDbType.VarChar).Value = Search.stock_price_open_to;
+                //    cmd.Parameters.Add("@priceHighFrom", SqlDbType.VarChar).Value = Search.stock_price_high_from;
+                //    cmd.Parameters.Add("@priceHighTo", SqlDbType.VarChar).Value = Search.stock_price_high_to;
+                //    cmd.Parameters.Add("@priceCloseFrom", SqlDbType.VarChar).Value = Search.stock_price_close_from;
+                //    cmd.Parameters.Add("@priceCloseTo", SqlDbType.VarChar).Value = Search.stock_price_close_to;
+                //    cmd.Parameters.Add("@priceLowFrom", SqlDbType.VarChar).Value = Search.stock_price_low_from;
+                //    cmd.Parameters.Add("@priceLowTo", SqlDbType.VarChar).Value = Search.stock_price_low_to;
+                //    cmd.Parameters.Add("@adjFrom", SqlDbType.VarChar).Value = Search.stock_price_adj_close_from;
+                //    cmd.Parameters.Add("@adjTo", SqlDbType.VarChar).Value = Search.stock_price_adj_close_to;
+                //    cmd.Parameters.Add("@volumeFrom", SqlDbType.VarChar).Value = Search.stock_volume_from;
+                //    cmd.Parameters.Add("@volumeTo", SqlDbType.VarChar).Value = Search.stock_volume_to;
+
+
+                //    cmd.ExecuteNonQuery();
 
                 //Call WCF -> to db stored procedure for search history data
                 dt2 = service.SearchData(Search);
+
+                //Call Verification method (OVERLOAD for assignment requirement) to check if dt2 have more than 1 row...
+                bool moreThanOneRow = Global.Verification(dt2, 1);
+                if (!moreThanOneRow) {
+                    MessageBox.Show("There are no results, Please change your filters and try again.");
+                };
 
                 //Insert data into datagrid_products
                 dataGrid_nyse.ItemsSource = dt2.DefaultView;
@@ -322,13 +355,13 @@ namespace StockApp
                 //Serialise Search and store in database
                 lastSearchHistory = Global.SerializeToXml(Search);
 
-            //SqlCommand cmd3 = con.CreateCommand();
-            //cmd3.CommandType = CommandType.Text;
-            //cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchAll= '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
-            //cmd3.ExecuteNonQuery();
+                //SqlCommand cmd3 = con.CreateCommand();
+                //cmd3.CommandType = CommandType.Text;
+                //cmd3.CommandText = "UPDATE Users SET lastSearchAll = '" +lastSearchHistory+ "' , lastSearchAll= '"+ lastSearchHistory + "' WHERE Id = " + Global.thisUser.Id;
+                //cmd3.ExecuteNonQuery();
 
                 int SearchToDb = service.lastSearch(lastSearchHistory, Global.thisUser.Id);
-                if(SearchToDb != 1)
+                if (SearchToDb != 1)
                 {
                     MessageBox.Show("Last Search is not saved to history search, something went wrong!");
                 }
@@ -360,75 +393,133 @@ namespace StockApp
                 visualiseInputBy.Items.Remove("stock_symbol");
                 visualiseInputBy.Items.Remove("exchange");
 
-            //}
+                //}
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong! \n Please use right search format. \n  For more informations check help on homepage.");
+            }
         }
 
         //COMBOBOX
         public void fill_combo_box(ComboBox comboBox, string header)
         {
-            comboBox.Items.Clear();
-
-            //Select all from units table
-            //SqlCommand cmd = con.CreateCommand();
-            //cmd.CommandType = CommandType.Text;
-            //cmd.CommandText = "SELECT DISTINCT " +header+ " FROM nyse_history";
-            //cmd.ExecuteNonQuery();
-
-            ////create new datatable and fill with cmd
-            //DataTable dt = new DataTable();
-            //SqlDataAdapter da = new SqlDataAdapter(cmd);
-            //da.Fill(dt);
-
-            DataTable dt = new DataTable();
-            dt = service.selectHeaders("nyse_history", header);
-
-            //iterate dt and add each row ["unit"] to combo box item
-            foreach (DataRow row in dt.Rows)
+            try
             {
-                comboBox.Items.Add(row[header].ToString());
+                comboBox.Items.Clear();
+
+                //Select all from units table
+                //SqlCommand cmd = con.CreateCommand();
+                //cmd.CommandType = CommandType.Text;
+                //cmd.CommandText = "SELECT DISTINCT " +header+ " FROM nyse_history";
+                //cmd.ExecuteNonQuery();
+
+                ////create new datatable and fill with cmd
+                //DataTable dt = new DataTable();
+                //SqlDataAdapter da = new SqlDataAdapter(cmd);
+                //da.Fill(dt);
+
+                DataTable dt = new DataTable();
+                dt = service.selectHeaders("nyse_history", header);
+
+                //iterate dt and add each row ["unit"] to combo box item
+                foreach (DataRow row in dt.Rows)
+                {
+                    comboBox.Items.Add(row[header].ToString());
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
             }
         }
 
         //SAVE BUTTON HANDLER
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            //Save user search from last log in
-            if(dt2.Rows.Count == 0)
+            try
             {
-                Global.SaveDataTableToXml(dt1);
+                //Save user search from last log in
+                if (dt2.Rows.Count == 0)
+                {
+                    Global.SaveDataTableToXml(dt1);
+                }
+                else
+                {
+                    //Else Save user search current
+                    Global.SaveDataTableToXml(dt2);
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                //Else Save user search current
-                Global.SaveDataTableToXml(dt2);
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
             }
         }
 
+        //VISUALISE BUTTON HANDLER
         private void Chart1btn_Click(object sender, RoutedEventArgs e)
         {
-            //Check if Visualise by: is selected
-            if(visualiseInputBy.SelectedItem == null)
+            try
             {
-                MessageBox.Show("Please select Visualise By: ");
-                return;
-            }
+                //Check if Visualise by: is selected
+                if (visualiseInputBy.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select Visualise By: ");
+                    return;
+                }
 
-            string chartDateOne = "";
-            string chartDateTwo = "";
+                string chartDateOne = "";
+                string chartDateTwo = "";
 
-            //List of chart values
-            List<double> numberList = new List<double>();
+                //List of chart values
+                List<double> numberList = new List<double>();
 
-            //Get visualise by: combobox input
-            string visualiseByInput = visualiseInputBy.SelectedValue.ToString();
+                //Get visualise by: combobox input
+                string visualiseByInput = visualiseInputBy.SelectedValue.ToString();
 
-            //Add values to list ( DataChart will be drawed from this list)
-            if(dt2.Rows.Count < 1)
-            {
-                if(dt1.Rows.Count > 0)
+                //Add values to list ( DataChart will be drawed from this list)
+                if (dt2.Rows.Count < 1)
+                {
+                    if (dt1.Rows.Count > 0)
+                    {
+                        var i = 0;
+                        foreach (DataRow row in dt1.Rows)
+                        {
+                            double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
+                            numberList.Add(item);
+                            i++;
+
+                            //draw first 1000 table => datachart
+                            if (i >= 1000) break;
+                        }
+                        //Get First Date and Last date from search... (current datatable)
+                        DataRow lastRowDT1 = dt1.Rows[dt1.Rows.Count - 1];
+                        DataRow firstRowDT1 = dt1.Rows[0];
+
+                        chartDateOne = firstRowDT1["date"].ToString();
+                        chartDateTwo = lastRowDT1["date"].ToString();
+                    }
+                    else
+                    {
+                        MessageBox.Show("There is no data to be visualised, please make new search.");
+                    }
+                }
+                else //If last search (dt2 exists)
                 {
                     var i = 0;
-                    foreach (DataRow row in dt1.Rows)
+                    foreach (DataRow row in dt2.Rows)
                     {
                         double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
                         numberList.Add(item);
@@ -438,44 +529,20 @@ namespace StockApp
                         if (i >= 1000) break;
                     }
                     //Get First Date and Last date from search... (current datatable)
-                    DataRow lastRowDT1 = dt1.Rows[dt1.Rows.Count - 1];
-                    DataRow firstRowDT1 = dt1.Rows[0];
+                    DataRow lastRowDT2 = dt2.Rows[dt2.Rows.Count - 1];
+                    DataRow firstRowDT2 = dt2.Rows[0];
 
-                    chartDateOne = firstRowDT1["date"].ToString();
-                    chartDateTwo = lastRowDT1["date"].ToString();
+                    chartDateOne = firstRowDT2["date"].ToString();
+                    chartDateTwo = lastRowDT2["date"].ToString();
                 }
-                else
+
+                //Clear labels if exist (Refresh axisX)
+                if (isLabel == 1)
                 {
-                    MessageBox.Show("There is no data to be visualised, please make new search.");
+                    chart1.AxisX.RemoveAt(1);
                 }
-            }
-            else //If last search (dt2 exists)
-            {
-                var i = 0;
-                foreach (DataRow row in dt2.Rows)
-                {
-                    double item = double.Parse(row[visualiseByInput].ToString(), CultureInfo.InvariantCulture);
-                    numberList.Add(item);
-                    i++;
 
-                    //draw first 1000 table => datachart
-                    if (i >= 1000) break;
-                }
-                //Get First Date and Last date from search... (current datatable)
-                DataRow lastRowDT2 = dt2.Rows[dt2.Rows.Count - 1];
-                DataRow firstRowDT2 = dt2.Rows[0];
-
-                chartDateOne = firstRowDT2["date"].ToString();
-                chartDateTwo = lastRowDT2["date"].ToString();
-            }
-            
-            //Clear labels if exist (Refresh axisX)
-            if(isLabel == 1)
-            {
-                chart1.AxisX.RemoveAt(1);
-            }
-
-            chart1.Series = new SeriesCollection
+                chart1.Series = new SeriesCollection
             {
                 new LineSeries
                 {
@@ -484,86 +551,117 @@ namespace StockApp
                 }
             };
 
-            //Add first and last date from search query to chart
-            chart1.AxisX.Add(new LiveCharts.Wpf.Axis
-            {
-                Separator = new LiveCharts.Wpf.Separator { Step = 1 },
-                Title = "Timeline",
-                MinValue = 0,
-                Labels = new[]
+                //Add first and last date from search query to chart
+                chart1.AxisX.Add(new LiveCharts.Wpf.Axis
                 {
+                    Separator = new LiveCharts.Wpf.Separator { Step = 1 },
+                    Title = "Timeline",
+                    MinValue = 0,
+                    Labels = new[]
+                    {
                     chartDateOne,
                     chartDateTwo
                 }
-            });
-            
-            //1 means that AxiX labels has been added, and they will be removed on next execution
-            isLabel = 1;
+                });
 
-           
+                //1 means that AxiX labels has been added, and they will be removed on next execution
+                isLabel = 1;
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         private void CompareBtn_Click(object sender, RoutedEventArgs e)
         {
-            string Compare = "";
-            
-            //Compare last search since user loged in
-            if (dt2.Rows.Count > 0)
+            try
             {
-                //Serialise search and save to DB
-                Compare = Global.SerializeTableToString(dt2);
+                string Compare = "";
 
-                MessageBox.Show("Dt2 rows > 0, Search to XML...");
-            }
-            else //Compare last search when user last loged in
-            {
-                Compare = Global.SerializeTableToString(dt1);
-
-                MessageBox.Show("dt1 Serialized successfully");
-            }
-
-            //Check -> save string Compare to CompareOne or CompareTwo in db...
-            if (Global.compare1)
-            {
-                Global.compare2 = true;
-                Global.compare1 = false;
-
-                int updateCompare = service.updateCompare(Compare, Global.thisUser.Id);
-                if(updateCompare != 1)
+                //Compare last search since user loged in
+                if (dt2.Rows.Count > 0)
                 {
-                    MessageBox.Show("Compare 2, not saved something went wrong!");
+                    //Serialise search and save to DB
+                    Compare = Global.SerializeTableToString(dt2);
+                }
+                else //Compare last search when user last loged in
+                {
+                    Compare = Global.SerializeTableToString(dt1);
                 }
 
-                MessageBox.Show("Updated!");
-            }
-            else
-            {
-                Global.compare1 = true;
-                Global.compare2 = false;
-
-                int insertCompare = service.insertCompare(Compare, Global.thisUser.Id);
-                if(insertCompare !=1)
+                //Check -> save string Compare to CompareOne or CompareTwo in db...
+                if (Global.compare1)
                 {
-                    MessageBox.Show("Compare table one is not saved, something went wrong!");
+                    Global.compare2 = true;
+                    Global.compare1 = false;
+
+                    int updateCompare = service.updateCompare(Compare, Global.thisUser.Id);
+                    if (updateCompare != 1)
+                    {
+                        MessageBox.Show("Compare 2, not saved something went wrong!");
+                    }
+                }
+                else
+                {
+                    Global.compare1 = true;
+                    Global.compare2 = false;
+
+                    int insertCompare = service.insertCompare(Compare, Global.thisUser.Id);
+                    if (insertCompare != 1)
+                    {
+                        MessageBox.Show("Compare table one is not saved, something went wrong!");
+                    }
+
                 }
 
-                MessageBox.Show("Inserted!");
+                if (Global.compare1)
+                {
+                    MessageBox.Show("Data One is ready to be compared... Please select second data set");
+                }
 
+                if (Global.compare2)
+                {
+                    MessageBox.Show("Data Two selected successfully!");
+                    //Open Compare Window
+                    var CompareWin = new Compare();
+                    CompareWin.Show();
+                }
             }
-
-            if (Global.compare1)
+            catch (System.Exception ex)
             {
-                MessageBox.Show("Compare 1 is true");
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong! Selected set of data that you are trying to compare may be too large, or server is facing issues.");
             }
 
-            if (Global.compare2)
+        }
+
+        //Escape button handler ::: go back to homepage
+        private void HandleEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
             {
-                MessageBox.Show("Compare 2 is true");
-                //Open Compare Window
-                var CompareWin = new Compare();
-                CompareWin.Show();
+                var homepage = new MainWindow();
+                homepage.Show();
+                this.Close();
             }
 
+            if(e.Key == Key.C)
+            {
+                compareBtn.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+
+            if(e.Key == Key.S)
+            {
+                saveBtn.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
         }
     }
 }

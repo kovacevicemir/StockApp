@@ -70,6 +70,10 @@ namespace StockApp
                 
         }
 
-
+        private void LogPathway_Click(object sender, RoutedEventArgs e)
+        {
+            string sDirectory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyApplicationDir");
+            MessageBox.Show(sDirectory.ToString());
+        }
     }
 }

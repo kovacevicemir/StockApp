@@ -307,8 +307,6 @@ namespace StockApp
                 {
                     MessageBox.Show("Compare 2, not saved something went wrong!");
                 }
-
-                MessageBox.Show("Updated!");
             }
             else
             {
@@ -320,19 +318,16 @@ namespace StockApp
                 {
                     MessageBox.Show("Compare table one is not saved, something went wrong!");
                 }
-
-                MessageBox.Show("Inserted!");
-
             }
 
             if (Global.compare1)
             {
-                MessageBox.Show("Compare 1 is true");
+                MessageBox.Show("Data One is ready to be compared... Please select second data set");
             }
 
             if (Global.compare2)
             {
-                MessageBox.Show("Compare 2 is true");
+                MessageBox.Show("Data Two selected successfully!");
                 //Open Compare Window
                 var CompareWin = new Compare();
                 CompareWin.Show();

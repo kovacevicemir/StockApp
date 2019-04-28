@@ -88,19 +88,19 @@
 
         <!--Compare-->
         <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="6" Orientation="Vertical" Grid.RowSpan="1">
-            <Button x:Name="compareBtn" Style="{StaticResource LiveButton}" Background="Coral" Content="Compare" Click="CompareBtn_Click"/>
+            <Button x:Name="compareBtn" Style="{StaticResource LiveButton}" ToolTip="Press C on keyboard" Background="Coral" Content="Compare" Click="CompareBtn_Click"/>
             <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap"><Run Text="Compare this search with other data..."/></TextBlock>
         </StackPanel>
 
         <!--Save-->
         <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="7" Orientation="Vertical" Grid.RowSpan="1">
-            <Button x:Name="saveBtn" Style="{StaticResource LiveButton}" Background="Coral" Click="SaveBtn_Click" Content="Save"/>
+            <Button x:Name="saveBtn" Style="{StaticResource LiveButton}" ToolTip="Press S on keyboard..." Background="Coral" Click="SaveBtn_Click" Content="Save"/>
             <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap"><Run Text="Save this search data to your PC..."/></TextBlock>
         </StackPanel>
 
         <!--Go Back to Homepage-->
         <StackPanel Style="{StaticResource StackStyle}" Margin="2" Grid.Row="0" Grid.Column="8" Orientation="Vertical" Grid.RowSpan="1">
-            <Button x:Name="homepageBtn" Style="{StaticResource LiveButton}" Background="Coral" Click="HomepageBtn_Click" Content="Homepage"/>
+            <Button x:Name="homepageBtn" Style="{StaticResource LiveButton}" Background="Coral" ToolTip="Go back to homepage... (ESC shortcut)" Click="HomepageBtn_Click" Content="Homepage"/>
             <TextBlock Foreground="white" TextAlignment="Center" TextWrapping="Wrap"><Run Text="Go back to homepage..."/></TextBlock>
         </StackPanel>
 
@@ -159,7 +159,7 @@
 
         <!--Search-->
         <StackPanel Style="{StaticResource StackStyle}" Grid.Row="7" Grid.RowSpan="1">
-            <Button x:Name="searchBtn" Margin="5" Background="#428bca" Foreground="White" Click="SearchBtn_Click" Content="Search"/>
+            <Button x:Name="searchBtn" ToolTip="Click or press Enter to make a search..." IsDefault="True" Margin="5" Background="#428bca" Foreground="White" Click="SearchBtn_Click" Content="Search"/>
         </StackPanel>
 
         <!--CHARTS-->

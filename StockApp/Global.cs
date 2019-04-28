@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using StockApp.Models;
+using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
@@ -103,6 +105,29 @@ namespace StockApp
             }
         }
 
+        //Write to custom Log.txt file method
+        public static void CustomLog(string outputMessage)
+        {
+            string sDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyApplicationDir");
+            //MessageBox.Show(sDirectory.ToString());
+
+            if (!Directory.Exists(sDirectory))
+            {
+                Directory.CreateDirectory(sDirectory);
+                using (FileStream stream = File.Create(Path.Combine(sDirectory, "Log.txt")))
+                {
+                    stream.Close();
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(sDirectory + "/Log.txt", append: true))
+            {
+                writer.WriteLine(outputMessage);
+                writer.Close();
+            }
+        }
+
+        //Used for compare button handler -> open compare window only if user select data 1 and data 2 to compare (simple switch)
         public static bool compare1 = false;
         public static bool compare2 = false;
 
@@ -111,6 +136,62 @@ namespace StockApp
 
         //CompareTwo Table
         public static bool CompareTwoTable = false;
+
+        //VERIFICATION METHOD - 0-9 A-Z
+        public static bool Verification(string verify)
+        {
+            if (verify != "")
+            {
+                bool verification = Regex.IsMatch(verify, @"^[a-zA-Z0-9]+$");
+                if (verification == false)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        //OVERLOAD VERIFICATION METHOD CHECK DATATABLE -> Check if dataTable is empty
+        public static bool Verification(DataTable verify)
+        {
+            if(verify != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //OVERLOAD VERIFICATION METHOD CHECK DATATABLE -> Check if dataTable have more than X amount of rows
+        public static bool Verification(DataTable verify, int rowNumber)
+        {
+            if (verify != null)
+            {
+                int counter = 0;
+                foreach(DataRow row in verify.Rows)
+                {
+                    counter++;
+                }
+                if(counter > rowNumber)
+                {
+                    return true; //Table is not null and it have more than int rowNumber rows...
+                }
+                else
+                {
+                    return false; //Table have less than int rowNumber rows, return false...
+                }
+            }
+            else
+            {
+                return false; //Table is null return false...
+            }
+        }
 
     }
 }

@@ -38,99 +38,121 @@ namespace StockApp
         //SUBMIT REGISTRATION BUTTON HANDLER
         private void SubmitRegistration_Click(object sender, RoutedEventArgs e)
         {
-            //Get all inputs
-            new_member.username = username_input.Text;
-            new_member.firstname= firstname_input.Text;
-            new_member.lastname = lastname_input.Text;
-            new_member.email = email_input.Text;
-            new_member.password = password_input.Text;
-
-            //VERIFY ALL INPUTS:
-            //Username verification
-            var username_verification = Verification(new_member.username);
-            if(username_verification == false) { return; }
-
-            //Firstname verification
-            var firstname_verification = Verification(new_member.firstname);
-            if (firstname_verification == false) { return; }
-
-            //Lastname verification
-            var lastname_verification = Verification(new_member.lastname);
-            if (lastname_verification == false) { return; }
-
-            //Password verification
-            var password_verification = Verification(new_member.password);
-            if (password_verification == false) { return; }
-
-            //Email
-            if(new_member.email == "")
+            try
             {
-                new_member.email = "none";
-            }
+                //Get all inputs
+                new_member.username = username_input.Text;
+                new_member.firstname = firstname_input.Text;
+                new_member.lastname = lastname_input.Text;
+                new_member.email = email_input.Text;
+                new_member.password = password_input.Text;
 
-            //SearchHistory for new user
-            new_member.lastSearchAll = "none";
-            new_member.lastSearchHistory = "none";
-            new_member.lastSearchLive = "none";
+                //VERIFY ALL INPUTS:
+                //Username verification
+                var username_verification = Verification(new_member.username);
+                if (username_verification == false) { return; }
 
+                //Firstname verification
+                var firstname_verification = Verification(new_member.firstname);
+                if (firstname_verification == false) { return; }
 
+                //Lastname verification
+                var lastname_verification = Verification(new_member.lastname);
+                if (lastname_verification == false) { return; }
 
-            int i = 0;
+                //Password verification
+                var password_verification = Verification(new_member.password);
+                if (password_verification == false) { return; }
 
-            ////Create Query command that select username where username = username_input
-            //SqlCommand cmd = con.CreateCommand();
-            //cmd.CommandType = System.Data.CommandType.Text;
-            //cmd.CommandText = "select * from Users where username='" + new_member.username + "'";
-            //cmd.ExecuteNonQuery();
-
-            ////Create data table with all usernames that are = username_input
-            //DataTable dt = new DataTable();
-            //SqlDataAdapter da = new SqlDataAdapter(cmd);
-            //da.Fill(dt);
-
-            DataTable dt = service.GetMemberByUsername(new_member.username);
-
-
-            //check how many rows in dt (check if there is existing username already in db)
-            i = Convert.ToInt32(dt.Rows.Count.ToString());
-
-            if (i == 0) //If non-existing username
-            {
-                //SqlCommand cmd1 = con.CreateCommand();
-                //cmd1.CommandType = CommandType.Text;
-                //cmd1.CommandText = "insert into Users values('nickname','emir','kovacevic','emir@nesto','sifra')";
-                //cmd1.ExecuteNonQuery();
-
-                int insertMember = service.insertMember(new_member.username, new_member.firstname, new_member.lastname, new_member.email, new_member.password, new_member.lastSearchAll, new_member.lastSearchHistory, new_member.lastSearchLive);
-                if(insertMember != 1)
+                //Email
+                if (new_member.email == "")
                 {
-                    MessageBox.Show("Something went wrong! Please restart application and try again");
+                    new_member.email = "none";
                 }
 
-                //clear error msg
-                errorArea.Visibility = Visibility.Collapsed;
+                //SearchHistory for new user
+                new_member.lastSearchAll = "none";
+                new_member.lastSearchHistory = "none";
+                new_member.lastSearchLive = "none";
 
-                errorMsg.Text = "";
 
-                //show loading gif.
-                Loader();
 
+                int i = 0;
+
+                ////Create Query command that select username where username = username_input
+                //SqlCommand cmd = con.CreateCommand();
+                //cmd.CommandType = System.Data.CommandType.Text;
+                //cmd.CommandText = "select * from Users where username='" + new_member.username + "'";
+                //cmd.ExecuteNonQuery();
+
+                ////Create data table with all usernames that are = username_input
+                //DataTable dt = new DataTable();
+                //SqlDataAdapter da = new SqlDataAdapter(cmd);
+                //da.Fill(dt);
+
+                DataTable dt = service.GetMemberByUsername(new_member.username);
+
+
+                //check how many rows in dt (check if there is existing username already in db)
+                i = Convert.ToInt32(dt.Rows.Count.ToString());
+
+                if (i == 0) //If non-existing username
+                {
+                    //SqlCommand cmd1 = con.CreateCommand();
+                    //cmd1.CommandType = CommandType.Text;
+                    //cmd1.CommandText = "insert into Users values('nickname','emir','kovacevic','emir@nesto','sifra')";
+                    //cmd1.ExecuteNonQuery();
+
+                    int insertMember = service.insertMember(new_member.username, new_member.firstname, new_member.lastname, new_member.email, new_member.password, new_member.lastSearchAll, new_member.lastSearchHistory, new_member.lastSearchLive);
+                    if (insertMember != 1)
+                    {
+                        MessageBox.Show("Something went wrong! Please restart application and try again");
+                    }
+
+                    //clear error msg
+                    errorArea.Visibility = Visibility.Collapsed;
+
+                    errorMsg.Text = "";
+
+                    //show loading gif.
+                    Loader();
+
+                }
+                else
+                {
+                    errorArea.Visibility = Visibility.Visible;
+                    errorMsg.Text = "Username already exists";
+                    username_input.Focus();
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                errorArea.Visibility = Visibility.Visible;
-                errorMsg.Text = "Username already exists";
-                username_input.Focus();
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
             }
-            
+
         }
 
         //BACK TO LOGIN BUTTON HANDLER
         private void BackToLoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            var loginpg = new Login();
-            loginpg.Show();
-            this.Close();
+            try
+            {
+                var loginpg = new Login();
+                loginpg.Show();
+                this.Close();
+            }
+            catch (System.Exception ex)
+            {
+                Global.CustomLog(ex.Message.ToString());
+                Global.CustomLog(ex.StackTrace.ToString());
+                Global.CustomLog("-------------------------------------------------------------------------------------------------------");
+
+                MessageBox.Show("Something went wrong, Please try again or conntact our IT team for support. Hint (Log.txt)");
+            }
         }
 
         //GIF LOADER AND SUCCESSFULL MESSAGE
@@ -170,5 +192,6 @@ namespace StockApp
             }
             return true;
         }
+
     }
 }

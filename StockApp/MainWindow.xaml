@@ -48,10 +48,10 @@
         <Button x:Name="liveBtn" Grid.Row="1" Grid.Column="1"  Content="LIVE" Style="{StaticResource LiveButton}" Background="#FFDD6C6C" Click="LiveBtn_Click"></Button>
         <TextBlock Grid.Column="1" Grid.Row="2" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Watch stock details in real time ! Only 5 request per day for regular users. Upgrade to VIP for unlimited requests</TextBlock>
         
-        <Button x:Name="historyBtn" Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" Click="HistoryBtn_Click" ></Button>
+        <Button x:Name="historyBtn" ToolTip="Shortcut H:key" Grid.Row="3" Grid.Column="1"  Content="HISTORY" Style="{StaticResource LiveButton}" Click="HistoryBtn_Click" ></Button>
         <TextBlock Grid.Column="1" Grid.Row="4" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Check stock market history from 2001 to 2015. Unlimited requests</TextBlock>
 
-        <Button x:Name="importBtn" Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D" Click="ImportBtn_Click"/>
+        <Button x:Name="importBtn" ToolTip="Shortcut I:key" Grid.Row="5" Grid.Column="1"  Content="IMPORT" Style="{StaticResource LiveButton}" Background="#FF291D1D" Click="ImportBtn_Click"/>
         <TextBlock Grid.Column="1" Grid.Row="6" TextAlignment="Center" Foreground="White" TextWrapping="Wrap">Import data option allows you to import pre saved requests. Note: JSON file only</TextBlock>
 
         <TextBlock Grid.Column="4" Grid.ColumnSpan="4" Foreground="White" TextAlignment="Center" VerticalAlignment="Bottom" FontSize="14">Your last data request or current stock market view:</TextBlock>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace StockWcf
 {
@@ -109,10 +110,13 @@ namespace StockWcf
                 da1.Fill(dt1);
                 return dt1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                CustomLog(ex.Message.ToString());
+                CustomLog(ex.StackTrace.ToString());
+                CustomLog("-------------------------------------------------------------------------------------------------------");
+                DataTable dt10 = new DataTable("dt10");
+                return dt10;
             }
             finally
             {
@@ -358,6 +362,26 @@ namespace StockWcf
                 {
                     conn.Close();
                 }
+            }
+        }
+
+        //Write to custom Log.txt file method
+        public static void CustomLog(string outputMessage)
+        {
+            string sDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MyApplicationDir");
+            if (!Directory.Exists(sDirectory))
+            {
+                Directory.CreateDirectory(sDirectory);
+                using (FileStream stream = File.Create(Path.Combine(sDirectory, "Log.txt")))
+                {
+                    stream.Close();
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(sDirectory + "/Log.txt", append: true))
+            {
+                writer.WriteLine(outputMessage);
+                writer.Close();
             }
         }
 
